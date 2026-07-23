@@ -1,0 +1,30 @@
+{
+  "C:\\Windows\\System32\\cmd.exe": {
+    "path": "C:\\Windows\\System32\\cmd.exe",
+    "hash": "f6c9532e1f4b66be96f0f56bd7c3a3c1997ea8066b91bfcc984e41f072c347ba",
+    "size": 331776,
+    "modified_time": "2021-06-05T13:05:12.279970",
+    "first_seen": "2026-07-23T01:54:20.126116"
+  },
+  "C:\\Windows\\System32\\svchost.exe": {
+    "path": "C:\\Windows\\System32\\svchost.exe",
+    "hash": "0ad27dc6b692903c4e129b1ad75ee8188da4b9ce34c309fed34a25fe86fb176d",
+    "size": 79944,
+    "modified_time": "2022-08-05T06:36:12.645434",
+    "first_seen": "2026-07-23T01:54:20.126116"
+  },
+  "C:\\Windows\\System32\\GroupPolicy\\Machine\\Registry.pol": {
+    "path": "C:\\Windows\\System32\\GroupPolicy\\Machine\\Registry.pol",
+    "hash": "ed81cb87f53c5745167c039e7a38ae58b19a5ddd80d64bfb870a03ff62be1ca9",
+    "size": 298,
+    "modified_time": "2026-07-06T19:17:49.188689",
+    "first_seen": "2026-07-23T01:54:20.126116"
+  },
+  "C:\\Windows\\System32\\drivers\\etc\\hosts": {
+    "path": "C:\\Windows\\System32\\drivers\\etc\\hosts",
+    "hash": "2d6bdfb341be3a6234b24742377f93aa7c7cfb0d9fd64efa9282c87852e57085",
+    "size": 824,
+    "modified_time": "2026-01-25T00:48:52.288464",
+    "first_seen": "2026-07-23T01:54:20.126116"
+  }
+}

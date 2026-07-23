@@ -1,0 +1,174 @@
+{
+  "summary": {
+    "phase": "Phase 6",
+    "title": "Performance Testing",
+    "timestamp": "2026-07-23T06:28:10.037587",
+    "duration_seconds": 22.56,
+    "total": 17,
+    "passed": 17,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "17/17 (100.0%)",
+    "by_severity": {
+      "INFO": 17
+    },
+    "target_met": true
+  },
+  "metadata": {
+    "baseline_cpu": "0.0%",
+    "baseline_ram_mb": "17.4",
+    "baseline_threads": "4",
+    "post_import_cpu": "0.0%",
+    "post_import_ram_mb": "96.1",
+    "import_delta_ram_mb": "78.8",
+    "post_start_cpu": "0.0%",
+    "post_start_ram_mb": "98.5",
+    "start_delta_ram_mb": "81.1",
+    "avg_cpu": "0.0%",
+    "avg_ram_mb": "99.1",
+    "max_ram_mb": "99.1",
+    "avg_threads": "13.0",
+    "avg_connections": "0.0",
+    "avg_open_files": "15.0",
+    "samples_taken": "5",
+    "post_stop_ram_mb": "99.0"
+  },
+  "results": [
+    {
+      "name": "CPU usage (baseline) < 5%",
+      "category": "CPU",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "0.0% (target: < 5%)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "CPU usage (post-import) < 10%",
+      "category": "CPU",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "0.0% (target: < 10%)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "CPU usage (post-start) < 15%",
+      "category": "CPU",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "0.0% (target: < 15%)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "CPU usage (sustained average) < 10%",
+      "category": "CPU",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Avg 0.0% across 5 samples (target: < 10%)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "RAM usage (baseline) < 200 MB",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "17.4 MB (target: < 200 MB)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "RAM increase (post-import) < 100 MB",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "+78.8 MB additional (target: < 100 MB increase)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "RAM usage (post-start) < 200 MB",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "98.5 MB (target: < 200 MB)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "RAM peak usage < 250 MB",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Peak 99.1 MB (target: < 250 MB)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Thread count (baseline) < 30",
+      "category": "Threads",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "4 threads (target: < 30)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Thread count (post-start) < 50",
+      "category": "Threads",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "13 threads (target: < 50)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Thread count (sustained) < 50",
+      "category": "Threads",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Avg 13 threads (target: < 50)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Network connections < 20",
+      "category": "Network",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Avg 0 connections (target: < 20)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Open file handles < 50",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Avg 15 open files (target: < 50)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "RAM stability (drift < 10 MB)",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "RAM drift 0.3 MB across samples (target: < 10 MB)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "CPU stability (drift < 5%)",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "CPU drift 0.0% (target: < 5%)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "psutil available for metrics",
+      "category": "Environment",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "psutil 7.2.2 available",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Components stop cleanly (no leaks)",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "RAM after stop: 99.0 MB (not significantly above peak)",
+      "suggested_fix": ""
+    }
+  ]
+}

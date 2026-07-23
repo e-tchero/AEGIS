@@ -1,0 +1,390 @@
+{
+  "summary": {
+    "phase": "Master",
+    "title": "Full Validation Suite",
+    "timestamp": "2026-07-23T00:46:03.866971",
+    "duration_seconds": 29.88,
+    "total": 46,
+    "passed": 40,
+    "failed": 6,
+    "pass_rate": 87.0,
+    "pass_rate_display": "40/46 (87.0%)",
+    "by_severity": {
+      "INFO": 40,
+      "WARN": 3,
+      "ERROR": 3
+    },
+    "target_met": false
+  },
+  "metadata": {},
+  "results": [
+    {
+      "name": "Python version \u2265 3.10",
+      "category": "Python Runtime",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Python 3.11.9",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Dependency: psutil \u2265 5.8.0",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "psutil 7.2.2",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Dependency: scapy \u2265 2.5.0",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "scapy 2.7.0",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Dependency: websockets \u2265 12.0",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "websockets 16.0",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Python packages installed",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "216 packages",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Configuration file loads",
+      "category": "Configuration",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "config.py loaded successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Configuration keys present",
+      "category": "Configuration",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All 23 keys present",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Configuration values reasonable",
+      "category": "Configuration",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All values in expected ranges",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Log directory writable",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Logs directory writable (C:\\Users\\ETCHE\\Downloads\\Projects\\AEGIS\\logs)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Config directory writable",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Config directory writable (C:\\Users\\ETCHE\\Downloads\\Projects\\AEGIS\\config)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Disk space \u2265 1GB free",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "19.0GB free",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Project structure intact",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All 5 project directories present",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Operating system supported",
+      "category": "Platform",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Windows 10",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Architecture detected",
+      "category": "Platform",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "AMD64 (Intel64 Family 6 Model 142 Stepping 10, GenuineIntel)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Port 8765 (AEGIS WebSocket)",
+      "category": "Network Ports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Port 8765 (AEGIS WebSocket) \u2014 in use (expected if running)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Port 3000 (Dashboard)",
+      "category": "Network Ports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Port 3000 (Dashboard) \u2014 in use (expected if running)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Administrator/root privileges",
+      "category": "Privileges",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Privilege check unavailable",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Firewall backend detected",
+      "category": "Privileges",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Active backend: simulation",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: core.heartbeat",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "core.heartbeat imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.firewall",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.firewall imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.firewall_backends",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.firewall_backends imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.incident_manager",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.incident_manager imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.ai_analyst",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.ai_analyst imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.evidence_engine",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.evidence_engine imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.dashboard_server",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.dashboard_server imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.net_sentinel",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.net_sentinel imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.dns_monitor",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.dns_monitor imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.memory_monitor",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.memory_monitor imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Component: Heartbeat",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Heartbeat start/stop OK",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Component: IncidentManager",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "IncidentManager start/stop OK",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: ruff \u2014 Fast Python linter (replaces flake8 + isort + pyflakes)",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "ruff 0.15.22",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: flake8 \u2014 Style guide enforcement (PEP8)",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "7.3.0 (mccabe: 0.7.0, pycodestyle: 2.14.0, pyflakes: 3.4.0) CPython 3.11.9 on",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: mypy \u2014 Static type checking",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "mypy 2.3.0 (compiled: yes)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: bandit \u2014 Security issue scanner",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "bandit 1.9.4",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: pylint \u2014 Comprehensive code quality analysis",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "pylint 4.0.6",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Ruff linter",
+      "category": "Static Analysis",
+      "passed": false,
+      "severity": "WARN",
+      "detail": "97 issue(s)",
+      "suggested_fix": "Run: ruff check --fix to auto-fix warnings"
+    },
+    {
+      "name": "Flake8 style check",
+      "category": "Static Analysis",
+      "passed": false,
+      "severity": "WARN",
+      "detail": "Issues found: C:\\Users\\ETCHE\\Downloads\\Projects\\AEGIS\\aegis.py:24:1: F401 'os as _os' imported but unused\nC:\\Users\\ETCHE\\Downloads\\Projects\\AEGIS\\aegis.py:34:1: F401 'typing.Dict' imported but unused\nC:\\Users\\ETCHE",
+      "suggested_fix": ""
+    },
+    {
+      "name": "MyPy type checking",
+      "category": "Static Analysis",
+      "passed": false,
+      "severity": "ERROR",
+      "detail": "20 type error(s)",
+      "suggested_fix": "Run: mypy to see details, add type hints to fix"
+    },
+    {
+      "name": "Bandit security scan",
+      "category": "Static Analysis",
+      "passed": false,
+      "severity": "ERROR",
+      "detail": "10 MEDIUM, 36 LOW issues",
+      "suggested_fix": "Review and fix medium-severity issues"
+    },
+    {
+      "name": "Pylint code quality",
+      "category": "Static Analysis",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Score: 8.62/10 \u2014 excellent!",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No hardcoded secrets",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No eval/exec usage",
+      "category": "Security",
+      "passed": false,
+      "severity": "ERROR",
+      "detail": "Found at: line 6073, line 6074, line 6075, line 6079, line 6080, line 6084, line 6085, line 6086, line 6090",
+      "suggested_fix": "eval/exec can execute arbitrary code \u2014 security risk"
+    },
+    {
+      "name": "No subprocess shell=True",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No insecure randomness",
+      "category": "Security",
+      "passed": false,
+      "severity": "WARN",
+      "detail": "Found at: line 3548",
+      "suggested_fix": "Use secrets module instead of random for security-critical operations"
+    },
+    {
+      "name": "No pickle deserialization",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No assert statements in production",
+      "category": "Code Quality",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    }
+  ]
+}

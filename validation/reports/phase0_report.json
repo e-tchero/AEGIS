@@ -1,0 +1,260 @@
+{
+  "summary": {
+    "phase": "Phase 0",
+    "title": "Environment Validation",
+    "timestamp": "2026-07-23T00:43:14.872439",
+    "duration_seconds": 8.75,
+    "total": 30,
+    "passed": 30,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "30/30 (100.0%)",
+    "by_severity": {
+      "INFO": 30
+    },
+    "target_met": true
+  },
+  "metadata": {},
+  "results": [
+    {
+      "name": "Python version \u2265 3.10",
+      "category": "Python Runtime",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Python 3.11.9",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Dependency: psutil \u2265 5.8.0",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "psutil 7.2.2",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Dependency: scapy \u2265 2.5.0",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "scapy 2.7.0",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Dependency: websockets \u2265 12.0",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "websockets 16.0",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Python packages installed",
+      "category": "Dependencies",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "216 packages",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Configuration file loads",
+      "category": "Configuration",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "config.py loaded successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Configuration keys present",
+      "category": "Configuration",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All 23 keys present",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Configuration values reasonable",
+      "category": "Configuration",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All values in expected ranges",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Log directory writable",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Logs directory writable (C:\\Users\\ETCHE\\Downloads\\Projects\\AEGIS\\logs)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Config directory writable",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Config directory writable (C:\\Users\\ETCHE\\Downloads\\Projects\\AEGIS\\config)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Disk space \u2265 1GB free",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "19.1GB free",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Project structure intact",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All 5 project directories present",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Operating system supported",
+      "category": "Platform",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Windows 10",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Architecture detected",
+      "category": "Platform",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "AMD64 (Intel64 Family 6 Model 142 Stepping 10, GenuineIntel)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Port 8765 (AEGIS WebSocket)",
+      "category": "Network Ports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Port 8765 (AEGIS WebSocket) \u2014 in use (expected if running)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Port 3000 (Dashboard)",
+      "category": "Network Ports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Port 3000 (Dashboard) \u2014 in use (expected if running)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Administrator/root privileges",
+      "category": "Privileges",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Privilege check unavailable",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Firewall backend detected",
+      "category": "Privileges",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Active backend: simulation",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: core.heartbeat",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "core.heartbeat imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.firewall",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.firewall imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.firewall_backends",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.firewall_backends imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.incident_manager",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.incident_manager imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.ai_analyst",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.ai_analyst imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.evidence_engine",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.evidence_engine imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.dashboard_server",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.dashboard_server imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.net_sentinel",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.net_sentinel imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.dns_monitor",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.dns_monitor imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Module: modules.memory_monitor",
+      "category": "Module Imports",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "modules.memory_monitor imported successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Component: Heartbeat",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Heartbeat start/stop OK",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Component: IncidentManager",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "IncidentManager start/stop OK",
+      "suggested_fix": ""
+    }
+  ]
+}

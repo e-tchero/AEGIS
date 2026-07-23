@@ -1,0 +1,157 @@
+{
+  "summary": {
+    "phase": "Phase 1",
+    "title": "Static Code Analysis",
+    "timestamp": "2026-07-23T01:42:45.163886",
+    "duration_seconds": 9.92,
+    "total": 16,
+    "passed": 16,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "16/16 (100.0%)",
+    "by_severity": {
+      "INFO": 16
+    },
+    "target_met": true
+  },
+  "metadata": {
+    "files_analyzed": 17,
+    "platform": "Windows",
+    "ruff_findings": 0,
+    "mypy_errors": 0,
+    "bandit_findings": 0,
+    "bandit_high": 0,
+    "bandit_medium": 0,
+    "pylint_score": 8.78
+  },
+  "results": [
+    {
+      "name": "Tool: ruff \u2014 Fast Python linter (replaces flake8 + isort + pyflakes)",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "ruff 0.15.22",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: flake8 \u2014 Style guide enforcement (PEP8)",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "7.3.0 (mccabe: 0.7.0, pycodestyle: 2.14.0, pyflakes: 3.4.0) CPython 3.11.9 on",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: mypy \u2014 Static type checking",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "mypy 2.3.0 (compiled: yes)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: bandit \u2014 Security issue scanner",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "bandit 1.9.4",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Tool: pylint \u2014 Comprehensive code quality analysis",
+      "category": "Tool Setup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "pylint 4.0.6",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Ruff linter",
+      "category": "Static Analysis",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found \u2014 clean!",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Flake8 style check",
+      "category": "Static Analysis",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No style violations \u2014 clean!",
+      "suggested_fix": ""
+    },
+    {
+      "name": "MyPy type checking",
+      "category": "Static Analysis",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No type errors \u2014 clean!",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Bandit security scan",
+      "category": "Static Analysis",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No security issues found \u2014 clean!",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Pylint code quality",
+      "category": "Static Analysis",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Score: 8.78/10 \u2014 excellent!",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No hardcoded secrets",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No eval/exec usage",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No subprocess shell=True",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No insecure randomness",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No pickle deserialization",
+      "category": "Security",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No assert statements in production",
+      "category": "Code Quality",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "No issues found",
+      "suggested_fix": ""
+    }
+  ]
+}

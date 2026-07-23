@@ -1,0 +1,203 @@
+{
+  "summary": {
+    "phase": "Phase 7",
+    "title": "Stress Testing",
+    "timestamp": "2026-07-23T06:44:05.854570",
+    "duration_seconds": 183.8,
+    "total": 22,
+    "passed": 22,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "22/22 (100.0%)",
+    "by_severity": {
+      "INFO": 22
+    },
+    "target_met": true
+  },
+  "metadata": {
+    "total_events_generated": "40000",
+    "incident_throughput": "432 ev/s",
+    "firewall_throughput": "104 blk/s",
+    "dns_throughput": "86957 q/s",
+    "login_throughput": "255383 ev/s",
+    "memory_after_mb": "25.1"
+  },
+  "results": [
+    {
+      "name": "IncidentManager throughput >= 400 ev/s",
+      "category": "Throughput",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "432 events/sec (target: >= 400)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No event loss during 10,000 event correlation",
+      "category": "Event Loss",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "10000/10000 correlate() calls returned successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "At least 1 incident created from 10,000 events",
+      "category": "Correlation",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "1 incident(s) created from 10000 events",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No crash during 10,000 event processing",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Processed 10000 events without crash",
+      "suggested_fix": ""
+    },
+    {
+      "name": "5,000 IPs blocked successfully",
+      "category": "Firewall",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "5000/5000 IPs blocked",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Firewall throughput >= 100 blocks/sec",
+      "category": "Throughput",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "104 blocks/sec (target: >= 100 for simulation backend)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "is_blocked() works under 5,000 IP load",
+      "category": "Firewall",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "100 random IPs confirmed blocked",
+      "suggested_fix": ""
+    },
+    {
+      "name": "get_blocked() sorted under load",
+      "category": "Firewall",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "get_blocked() returns 5000 IPs in sorted order",
+      "suggested_fix": ""
+    },
+    {
+      "name": "clear_blocked() works after 5,000 blocks",
+      "category": "Firewall",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Cleared 5000 IPs",
+      "suggested_fix": ""
+    },
+    {
+      "name": "DNS throughput >= 5,000 queries/sec",
+      "category": "Throughput",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "86957 queries/sec (target: >= 5,000)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No crash during 10,000 DNS queries",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Processed 10000 queries, 200 threats detected",
+      "suggested_fix": ""
+    },
+    {
+      "name": "DNS cleanup() works after 10,000 queries",
+      "category": "Cleanup",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "cleanup() succeeded, 200 domains tracked (all recent, none expected to be purged)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Login throughput >= 5,000 events/sec",
+      "category": "Throughput",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "255383 events/sec (target: >= 5,000)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No crash during 5,000 login attempts",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Processed 5000 attempts, 50 brute force alerts, 50 IPs tracked",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Brute force detection still works under load",
+      "category": "Detection",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Brute force still detected after 5,000 events: HIGH",
+      "suggested_fix": ""
+    },
+    {
+      "name": "100-attacker throughput >= 300 ev/s",
+      "category": "Throughput",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "414 events/sec across 100 attackers (target: >= 300)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "At least 1 incident created from 100 attackers",
+      "category": "Correlation",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "1 incident(s) from 100 attackers (time-based merge within 300s window)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No crash during 100-attacker load",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "100 events counted via event_count (MAX_INCIDENT_EVENTS=100 cap)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Memory usage < 150 MB after all stress tests",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "25.1 MB RSS after stress tests (target: < 150 MB)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Memory leak < 20 MB during stress tests",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Memory delta: +0.0 MB during stress tests (target: < 20 MB)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "All concurrent workers complete without deadlock",
+      "category": "Concurrency",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All 4 workers completed in 38.8s",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No deadlock during concurrent operations",
+      "category": "Concurrency",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Completed in 38.8s (no deadlock detected, timeout was 60s)",
+      "suggested_fix": ""
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+# Project AEGIS — Python Dependencies
+# Lead Architect: ETCHERO / Abdul-Hameed
+#
+# Install all:
+#   pip install -r requirements.txt
+#
+# On Linux/Parrot OS (system Python):
+#   pip install -r requirements.txt --break-system-packages
+
+# Core dependencies
+psutil>=5.9.0
+scapy>=2.5.0
+
+# Development / testing
+pytest>=7.0.0
+pytest-mock>=3.10.0

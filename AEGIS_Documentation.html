@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project AEGIS — Technical Documentation v1.0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0c10;
+    --bg2: #111419;
+    --bg3: #181c23;
+    --border: #1e2430;
+    --border2: #2a3245;
+    --accent: #00ff88;
+    --accent2: #0099ff;
+    --accent3: #ff6b35;
+    --warn: #ffcc00;
+    --text: #e2e8f0;
+    --text2: #8892a4;
+    --text3: #4a5568;
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Inter', sans-serif;
+    --display: 'Space Grotesk', sans-serif;
+    --red: #ff4757;
+    --purple: #a78bfa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.75;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 0 4rem;
+    margin-bottom: 4rem;
+  }
+  .cover-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cover-tag::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .cover h1 {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+    color: #fff;
+  }
+  .cover h1 span { color: var(--accent); }
+  .cover-sub {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text3);
+  }
+  .meta-item { display: flex; gap: 6px; align-items: center; }
+  .meta-item span { color: var(--text2); }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 4rem;
+  }
+  .toc-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .toc ol { padding-left: 1.5rem; }
+  .toc li { margin-bottom: .5rem; }
+  .toc a { color: var(--text2); text-decoration: none; font-size: 14px; }
+  .toc a:hover { color: var(--accent); }
+  .toc ol ol { margin-top: .35rem; }
+  .toc ol ol li { margin-bottom: .25rem; }
+  .toc ol ol a { font-size: 13px; color: var(--text3); }
+
+  /* ── SECTIONS ── */
+  section { margin-bottom: 5rem; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: .75rem;
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 1.25rem;
+    letter-spacing: -.015em;
+  }
+
+  h3 {
+    font-family: var(--display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 2.5rem 0 .9rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h4 {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: .08em;
+    color: var(--accent2);
+    margin: 1.75rem 0 .6rem;
+    text-transform: uppercase;
+  }
+
+  p { color: var(--text2); margin-bottom: 1rem; }
+  p strong { color: var(--text); font-weight: 500; }
+
+  /* ── CODE ── */
+  pre {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1.25rem 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: #a8b5cc;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--bg3);
+    color: var(--accent);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #a8b5cc;
+    font-size: inherit;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  @media(max-width: 640px) {
+    .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+  }
+  .card-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: .1em;
+    margin-bottom: .5rem;
+  }
+  .card p { font-size: 13px; margin-bottom: 0; }
+
+  /* ── ARCH BOX ── */
+  .arch-box {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.8;
+    color: #8892a4;
+  }
+  .arch-box .hi { color: var(--accent); }
+  .arch-box .hi2 { color: var(--accent2); }
+  .arch-box .hi3 { color: var(--accent3); }
+  .arch-box .dim { color: var(--text3); }
+
+  /* ── TABLES ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 13.5px;
+  }
+  th {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    padding: .65rem 1rem;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text2);
+    font-weight: 400;
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: .65rem 1rem;
+    color: var(--text2);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(255,255,255,.015); }
+  td code { font-size: 12px; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+  .badge-green { background: rgba(0,255,136,.1); color: var(--accent); border: 1px solid rgba(0,255,136,.2); }
+  .badge-blue  { background: rgba(0,153,255,.1); color: var(--accent2); border: 1px solid rgba(0,153,255,.2); }
+  .badge-red   { background: rgba(255,71,87,.1); color: var(--red); border: 1px solid rgba(255,71,87,.2); }
+  .badge-warn  { background: rgba(255,204,0,.1); color: var(--warn); border: 1px solid rgba(255,204,0,.2); }
+  .badge-purple{ background: rgba(167,139,250,.1); color: var(--purple); border: 1px solid rgba(167,139,250,.2); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 3px solid;
+    border-radius: 0 6px 6px 0;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    font-size: 14px;
+  }
+  .callout p { margin-bottom: 0; }
+  .callout-info  { border-color: var(--accent2); background: rgba(0,153,255,.06); }
+  .callout-warn  { border-color: var(--warn); background: rgba(255,204,0,.06); }
+  .callout-danger{ border-color: var(--red); background: rgba(255,71,87,.06); }
+  .callout-tip   { border-color: var(--accent); background: rgba(0,255,136,.06); }
+
+  /* ── DIVIDER ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: .5rem 1rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+  .flow-arrow {
+    padding: 0 .5rem;
+    color: var(--text3);
+    font-size: 18px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 3rem;
+    margin-top: 5rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text3);
+    line-height: 2;
+  }
+  footer .accent { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div class="cover-tag">Technical Documentation</div>
+  <h1>Project <span>AEGIS</span></h1>
+  <p class="cover-sub">
+    Autonomous Security Operations Agent — a modular, self-reasoning cybersecurity system
+    built for Parrot OS and Windows. Detects threats, explains its decisions, and responds autonomously.
+  </p>
+  <div class="meta-row">
+    <div class="meta-item">VERSION <span>1.0.0</span></div>
+    <div class="meta-item">ARCHITECT <span>ETCHERO / Abdul-Hameed</span></div>
+    <div class="meta-item">PLATFORM <span>Linux · Windows</span></div>
+    <div class="meta-item">LANGUAGE <span>Python 3.10+</span></div>
+    <div class="meta-item">CLASSIFICATION <span>AEGIS-CORE</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ TOC -->
+<div class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <ol>
+    <li><a href="#overview">Project Overview</a></li>
+    <li><a href="#architecture">System Architecture</a>
+      <ol>
+        <li><a href="#folder-structure">Folder Structure</a></li>
+        <li><a href="#data-flow">Data Flow</a></li>
+      </ol>
+    </li>
+    <li><a href="#modules">Module Reference</a>
+      <ol>
+        <li><a href="#heartbeat">heartbeat.py — The Nervous System</a></li>
+        <li><a href="#sentinel">net_sentinel.py — The Eyes</a></li>
+        <li><a href="#firewall">firewall.py — The Fists</a></li>
+        <li><a href="#aegis">aegis.py — The Brain</a></li>
+      </ol>
+    </li>
+    <li><a href="#reasoning">The Reasoning Engine</a></li>
+    <li><a href="#threat-tiers">Threat Response Tiers</a></li>
+    <li><a href="#crossplatform">Cross-Platform Design</a></li>
+    <li><a href="#install">Installation &amp; Setup</a></li>
+    <li><a href="#usage">Running AEGIS</a></li>
+    <li><a href="#logs">Log Files</a></li>
+    <li><a href="#deps">Dependencies</a></li>
+    <li><a href="#extend">Extending AEGIS</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ 1. OVERVIEW -->
+<section id="overview">
+  <div class="section-label">01 — Overview</div>
+  <h2>What is AEGIS?</h2>
+  <p>
+    AEGIS (Autonomous Engine for General Intrusion Suppression) is a Python-based security operations agent.
+    It runs continuously in the background, watching your system the same way a human security analyst would —
+    except it never sleeps, never misses a packet, and acts in seconds.
+  </p>
+  <p>
+    Unlike traditional security tools that only alert you after something happens, AEGIS follows a
+    <strong>detect → reason → respond</strong> loop. Before taking any action, the agent generates a
+    human-readable explanation of <em>why</em> it is doing what it is doing. This is the Reasoning Engine —
+    the feature that separates AEGIS from a basic script.
+  </p>
+
+  <div class="card-grid card-grid-3">
+    <div class="card">
+      <div class="card-title">Detect</div>
+      <p>Monitors CPU, RAM, network I/O, and raw TCP packets in real time. Flags anomalies the instant they cross defined thresholds.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Reason</div>
+      <p>Before every action, AEGIS prints and logs <em>why</em> it is acting. No silent kills. Every decision has a paper trail.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Respond</div>
+      <p>Four-tier autonomous response: passive log → alert → semi-auto block → instant kernel-level IP drop via iptables.</p>
+    </div>
+  </div>
+
+  <h3>Design Philosophy</h3>
+  <p>
+    AEGIS was built around three principles that come directly from the <strong>Manus agentic architecture</strong>:
+  </p>
+  <ol style="color:var(--text2); padding-left:1.5rem; margin-bottom:1rem;">
+    <li style="margin-bottom:.5rem;"><strong style="color:var(--text)">Modular</strong> — each file does exactly one job. Swap or upgrade any module without touching the others.</li>
+    <li style="margin-bottom:.5rem;"><strong style="color:var(--text)">Explainable</strong> — every automated decision is logged with a reasoning string before it executes.</li>
+    <li style="margin-bottom:.5rem;"><strong style="color:var(--text)">Cross-platform</strong> — runs in full live mode on Linux/Parrot OS; degrades gracefully to simulation mode on Windows.</li>
+  </ol>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 2. ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-label">02 — Architecture</div>
+  <h2>System Architecture</h2>
+
+  <h3 id="folder-structure">Folder Structure</h3>
+  <pre>
+AEGIS/
+├── aegis.py                  ← Master orchestrator — THE BRAIN
+├── requirements.txt          ← pip dependencies
+├── install.sh                ← Linux / Parrot OS setup script
+├── install.bat               ← Windows setup script
+├── README.md                 ← Quick-start guide
+│
+├── core/
+│   ├── __init__.py
+│   └── heartbeat.py          ← System health monitor (CPU/RAM/Net)
+│
+├── modules/
+│   ├── __init__.py
+│   ├── net_sentinel.py       ← Scapy SYN scan detector
+│   └── firewall.py           ← iptables abstraction (Linux/Windows)
+│
+└── logs/                     ← All agent logs (auto-created at runtime)
+    ├── aegis_master.log      ← Every decision made by the Brain
+    ├── aegis_health.log      ← Heartbeat pulse history (JSON)
+    ├── sentinel.log          ← ThreatSnapshot JSON per event
+    └── firewall.log          ← Every block/unblock action</pre>
+
+  <h3 id="data-flow">Data Flow</h3>
+  <p>
+    All data flows in one direction: from the sensing layer → into the Brain → out to the action layer.
+    The Brain never blocks — it uses a thread-safe queue so the Heartbeat and Sentinel can always keep running.
+  </p>
+
+  <div class="arch-box">
+    <span class="hi">[ INPUT LAYER ]</span><br>
+    &nbsp;&nbsp;&nbsp;heartbeat.py &nbsp;&nbsp;→ &nbsp;SystemSnapshot &nbsp;→ &nbsp;terminal display + health log<br>
+    &nbsp;&nbsp;&nbsp;net_sentinel.py → &nbsp;ThreatSnapshot &nbsp;→ &nbsp;threat_queue (thread-safe)<br><br>
+    <span class="hi">[ BRAIN — aegis.py logic loop ]</span><br>
+    &nbsp;&nbsp;&nbsp;_logic_loop() drains threat_queue every 0.5s<br>
+    &nbsp;&nbsp;&nbsp;_handle_threat() → routes by risk level to the correct responder<br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hi2">CRITICAL</span> &nbsp;→ &nbsp;_critical_response() &nbsp;→ &nbsp;block_ip() immediately<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hi2">HIGH</span> &nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;_high_response() &nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;5s countdown, then block_ip()<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hi2">MEDIUM</span> &nbsp;&nbsp;→ &nbsp;_medium_response() &nbsp;&nbsp;→ &nbsp;log + watch<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hi2">LOW</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;_low_response() &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ &nbsp;passive log<br><br>
+    <span class="hi">[ ACTION LAYER — firewall.py ]</span><br>
+    &nbsp;&nbsp;&nbsp;<span class="dim">Linux: &nbsp;</span> sudo iptables -A INPUT -s {ip} -j DROP &nbsp;<span class="dim">(real kernel block)</span><br>
+    &nbsp;&nbsp;&nbsp;<span class="dim">Windows:</span> [SIM] log the would-be action, return True &nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">(safe simulation)</span><br><br>
+    <span class="hi">[ PERSISTENCE ]</span><br>
+    &nbsp;&nbsp;&nbsp;All events → logs/ &nbsp;(pathlib paths, works on C:\ and /home/)
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 3. MODULES -->
+<section id="modules">
+  <div class="section-label">03 — Module Reference</div>
+  <h2>Module Reference</h2>
+
+  <!-- HEARTBEAT -->
+  <h3 id="heartbeat">heartbeat.py — The Nervous System</h3>
+  <p>
+    <span class="badge badge-green">core/heartbeat.py</span>&nbsp;
+    <span class="badge badge-blue">THREAD: daemon</span>
+  </p>
+  <p>
+    The Heartbeat is the first module to boot. It pulses every 10 seconds, samples system vitals,
+    runs them through the <code>ReasoningEngine</code>, and emits a <code>SystemSnapshot</code>.
+    It also writes every snapshot to <code>logs/aegis_health.log</code> as a JSON line.
+  </p>
+
+  <h4>Key Classes</h4>
+  <table>
+    <thead><tr><th>Class</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td><code>ReasoningEngine</code></td><td>Evaluates CPU, RAM, and network readings. Returns a health score (0–100), a status label, and a human-readable reasoning string.</td></tr>
+      <tr><td><code>Heartbeat</code></td><td>Calls <code>psutil</code> every 10 seconds, feeds readings to the engine, displays results in the terminal, and logs to JSON.</td></tr>
+      <tr><td><code>SystemSnapshot</code></td><td>A <code>@dataclass</code> holding one complete pulse: timestamp, CPU%, RAM%, net speeds, connection count, score, status, reasoning.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Health Score Formula</h4>
+  <table>
+    <thead><tr><th>Condition</th><th>Deduction</th><th>Flag Added</th></tr></thead>
+    <tbody>
+      <tr><td>CPU &gt; 85%</td><td>−30 pts</td><td><code>CPU_CRITICAL</code></td></tr>
+      <tr><td>CPU &gt; 60%</td><td>−10 pts</td><td><code>CPU_ELEVATED</code></td></tr>
+      <tr><td>RAM &gt; 90%</td><td>−25 pts</td><td><code>RAM_CRITICAL</code></td></tr>
+      <tr><td>RAM &gt; 75%</td><td>−8 pts</td><td><code>RAM_ELEVATED</code></td></tr>
+      <tr><td>Net out &gt; 50 MB/s</td><td>−20 pts</td><td><code>NET_EXFIL_RISK</code></td></tr>
+      <tr><td>Net in &gt; 100 MB/s</td><td>−15 pts</td><td><code>NET_FLOOD_RISK</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Status Labels</h4>
+  <table>
+    <thead><tr><th>Score Range</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>85 – 100</td><td><span class="badge badge-green">NOMINAL</span></td></tr>
+      <tr><td>60 – 84</td><td><span class="badge badge-warn">DEGRADED</span></td></tr>
+      <tr><td>35 – 59</td><td><span class="badge badge-red">COMPROMISED</span></td></tr>
+      <tr><td>0 – 34</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Configuration Constants</h4>
+  <pre>
+PULSE_INTERVAL       = 10     # seconds between each heartbeat
+CPU_DANGER_THRESHOLD = 85     # % — triggers CPU_CRITICAL flag
+RAM_DANGER_THRESHOLD = 90     # % — triggers RAM_CRITICAL flag
+NET_SPIKE_THRESHOLD  = 50     # MB/s outbound — triggers NET_EXFIL_RISK</pre>
+
+  <div class="callout callout-info">
+    <p><strong>Note on permissions:</strong> The line <code>psutil.net_connections(kind="inet")</code> requires root on Linux to enumerate all process sockets. AEGIS wraps this in a try/except — it returns <code>-1</code> for the connection count rather than crashing if run without sudo.</p>
+  </div>
+
+  <hr>
+
+  <!-- SENTINEL -->
+  <h3 id="sentinel">net_sentinel.py — The Eyes</h3>
+  <p>
+    <span class="badge badge-green">modules/net_sentinel.py</span>&nbsp;
+    <span class="badge badge-blue">THREAD: daemon</span>&nbsp;
+    <span class="badge badge-warn">REQUIRES: root + libpcap</span>
+  </p>
+  <p>
+    The Sentinel is a passive network sniffer. It uses the <code>Scapy</code> library to read raw
+    TCP packets off the wire without interfering with any traffic. Its job is to detect
+    <strong>SYN scans</strong> — the technique used by tools like Nmap to map open ports on a target machine.
+  </p>
+
+  <h4>How SYN Scan Detection Works</h4>
+  <p>
+    A SYN scan works by sending TCP packets with only the SYN flag set (no ACK). This is the
+    first step of a TCP handshake — the scanner sends it to see if a port is open, but never
+    completes the connection. AEGIS watches for this exact pattern:
+  </p>
+  <div class="flow">
+    <div class="flow-box">Attacker sends SYN</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Scapy captures packet</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Filter: SYN=1, ACK=0</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">IP tracker updated</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Port count ≥ 10?</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">ThreatSnapshot emitted</div>
+  </div>
+
+  <h4>Key Classes</h4>
+  <table>
+    <thead><tr><th>Class</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td><code>ThreatSnapshot</code></td><td>Dataclass: timestamp, attacker IP, list of ports hit, port count, risk level, threat type, reasoning, action taken, iptables-ready flag.</td></tr>
+      <tr><td><code>SentinelReasoning</code></td><td>Evaluates an IP's port count. Returns risk level (LOW/MEDIUM/HIGH/CRITICAL), a reasoning string, and a recommended action.</td></tr>
+      <tr><td><code>NetSentinel</code></td><td>Owns the Scapy sniff loop (runs in a daemon thread). Tracks ports per IP in a 5-second sliding window. Calls <code>on_threat()</code> callback on detection.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Risk Levels (Sentinel)</h4>
+  <table>
+    <thead><tr><th>Ports Hit</th><th>Risk Level</th><th>Recommended Action</th><th>Nmap Equivalent</th></tr></thead>
+    <tbody>
+      <tr><td>10 – 24</td><td><span class="badge badge-warn">MEDIUM</span></td><td>LOG_AND_WATCH</td><td>Slow scan / script-kiddie probe</td></tr>
+      <tr><td>25 – 49</td><td><span class="badge badge-red">HIGH</span></td><td>ALERT_AND_MONITOR</td><td>Nmap -F (fast scan)</td></tr>
+      <tr><td>50+</td><td><span class="badge badge-red">CRITICAL</span></td><td>FLAG_FOR_AUTOBLOCK</td><td>Nmap -sS (full stealth scan)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Alert Cooldown</h4>
+  <p>
+    Once an IP triggers an alert, AEGIS resets its port tracker and applies a 15-second cooldown for that IP.
+    This prevents a single aggressive scan from flooding the logs with duplicate alerts.
+  </p>
+
+  <h4>Thread Safety</h4>
+  <p>
+    The Scapy sniffer runs on its own daemon thread (<code>name="AEGIS-Sentinel"</code>).
+    All shared state (<code>_ip_tracker</code>, <code>_port_tracker</code>, <code>_threats</code>)
+    is protected by a single <code>threading.Lock</code>. The <code>on_threat()</code> callback
+    (which pushes to <code>AegisCore._threat_queue</code>) is called while holding the lock,
+    ensuring the Brain always receives complete, consistent snapshots.
+  </p>
+
+  <h4>Configuration Constants</h4>
+  <pre>
+SCAN_WINDOW_SECONDS = 5    # Time window for counting port hits per IP
+PORT_HIT_THRESHOLD  = 10   # Unique ports in window to trigger alert</pre>
+
+  <hr>
+
+  <!-- FIREWALL -->
+  <h3 id="firewall">firewall.py — The Fists</h3>
+  <p>
+    <span class="badge badge-green">modules/firewall.py</span>&nbsp;
+    <span class="badge badge-blue">CROSS-PLATFORM</span>
+  </p>
+  <p>
+    The Firewall module is the action layer. It provides a clean Python API for blocking and
+    unblocking IP addresses. Internally it detects the operating system at import time and routes
+    every call to either a real <code>iptables</code> command or a simulation log.
+  </p>
+
+  <h4>OS Detection Logic</h4>
+  <pre>
+import platform
+
+CURRENT_OS = platform.system()   # Returns: 'Linux', 'Windows', or 'Darwin'
+SIMULATION = CURRENT_OS != "Linux"
+SIM_LABEL  = "[SIM]" if SIMULATION else "[LIVE]"</pre>
+
+  <p>
+    This single boolean <code>SIMULATION</code> flows through the entire codebase.
+    Every module imports it from <code>firewall.py</code> — there is only one source of truth for the OS mode.
+  </p>
+
+  <h4>Public API</h4>
+  <table>
+    <thead><tr><th>Function</th><th>Signature</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>block_ip</code></td><td><code>(ip: str) → bool</code></td><td>Block an IP. Linux: iptables DROP. Windows: simulation log. Returns True on success.</td></tr>
+      <tr><td><code>unblock_ip</code></td><td><code>(ip: str) → bool</code></td><td>Remove an IP from the block list. Same OS branching as block_ip.</td></tr>
+      <tr><td><code>is_blocked</code></td><td><code>(ip: str) → bool</code></td><td>Check if an IP is in the current session's block set.</td></tr>
+      <tr><td><code>get_blocked</code></td><td><code>() → list[str]</code></td><td>Return a sorted list of all currently blocked IPs.</td></tr>
+      <tr><td><code>dump_block_list</code></td><td><code>() → None</code></td><td>Print the full block list to the terminal. Called on shutdown.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Linux iptables Command</h4>
+  <pre>
+# Executed on Linux when block_ip(ip) is called:
+sudo iptables -A INPUT -s {ip} -j DROP
+
+# Executed on Linux when unblock_ip(ip) is called:
+sudo iptables -D INPUT -s {ip} -j DROP</pre>
+
+  <div class="callout callout-warn">
+    <p><strong>Important:</strong> iptables rules are <em>not persistent</em> across reboots by default on Linux. To make blocks permanent, install <code>iptables-persistent</code> (<code>apt install iptables-persistent</code>) and run <code>netfilter-persistent save</code> after AEGIS blocks an IP.</p>
+  </div>
+
+  <hr>
+
+  <!-- AEGIS.PY -->
+  <h3 id="aegis">aegis.py — The Brain</h3>
+  <p>
+    <span class="badge badge-green">aegis.py</span>&nbsp;
+    <span class="badge badge-purple">ENTRY POINT</span>
+  </p>
+  <p>
+    <code>aegis.py</code> is the master orchestrator. It is the only file you need to run.
+    It boots all other modules, manages their threads, and owns the central decision loop.
+  </p>
+
+  <h4>AegisCore Class</h4>
+  <table>
+    <thead><tr><th>Method</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td><code>start()</code></td><td>Boots the Heartbeat thread, boots the Sentinel thread (with full error handling), then enters the logic loop. Catches Ctrl+C and calls stop().</td></tr>
+      <tr><td><code>_boot_heartbeat()</code></td><td>Creates a Heartbeat instance and starts it as a daemon thread named "AEGIS-Heartbeat".</td></tr>
+      <tr><td><code>_boot_sentinel()</code></td><td>Attempts to import and start NetSentinel. Catches ImportError (Scapy not installed), OSError (Npcap missing on Windows), and any generic Exception. Logs the failure and continues — AEGIS does not crash without the Sentinel.</td></tr>
+      <tr><td><code>_on_threat_received(snap)</code></td><td>Callback passed to NetSentinel. Called from the Sentinel's thread. Acquires the lock and pushes the snapshot onto the queue.</td></tr>
+      <tr><td><code>_logic_loop()</code></td><td>Runs on the main thread. Every 0.5 seconds: acquires lock, drains the queue, releases lock, then calls _handle_threat() for each snapshot.</td></tr>
+      <tr><td><code>_handle_threat(snap)</code></td><td>Routes by risk level: CRITICAL → _critical_response, HIGH → _high_response, MEDIUM → _medium_response, LOW → _low_response.</td></tr>
+      <tr><td><code>stop()</code></td><td>Sets _running = False, stops the Sentinel, dumps the block list, logs the shutdown.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Thread Map</h4>
+  <table>
+    <thead><tr><th>Thread Name</th><th>Daemon?</th><th>Runs</th><th>Started by</th></tr></thead>
+    <tbody>
+      <tr><td><code>AEGIS-Heartbeat</code></td><td>Yes</td><td><code>heartbeat.run()</code> — 10s pulse loop</td><td><code>_boot_heartbeat()</code></td></tr>
+      <tr><td><code>AEGIS-Sentinel</code></td><td>Yes</td><td><code>sniff()</code> — Scapy packet loop</td><td><code>_boot_sentinel()</code></td></tr>
+      <tr><td><em>Main thread</em></td><td>N/A</td><td><code>_logic_loop()</code> — threat queue drain</td><td><code>start()</code></td></tr>
+      <tr><td><em>Anon daemon</em></td><td>Yes</td><td><code>input()</code> wait for HIGH-risk operator override</td><td><code>_high_response()</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 4. REASONING ENGINE -->
+<section id="reasoning">
+  <div class="section-label">04 — Reasoning Engine</div>
+  <h2>The Reasoning Engine</h2>
+  <p>
+    The Reasoning Engine is what makes AEGIS an <em>agent</em> rather than a script. Every module
+    has its own <code>ReasoningEngine</code> or <code>SentinelReasoning</code> class that evaluates
+    raw data and produces three outputs before any action is taken:
+  </p>
+  <ol style="color:var(--text2); padding-left:1.5rem; margin-bottom:1.5rem;">
+    <li style="margin-bottom:.5rem;"><strong style="color:var(--text)">A decision</strong> — what risk level or health score has been assigned</li>
+    <li style="margin-bottom:.5rem;"><strong style="color:var(--text)">A status</strong> — NOMINAL / DEGRADED / CRITICAL / etc.</li>
+    <li style="margin-bottom:.5rem;"><strong style="color:var(--text)">A reasoning string</strong> — plain English explanation of exactly why this decision was made</li>
+  </ol>
+  <p>Example reasoning outputs from a live session:</p>
+  <pre>
+# Heartbeat Reasoning Engine output:
+→ CPU at 87.3% — exceeds 85% threshold.
+  Possible cause: runaway process, crypto-miner, or DoS stress. |
+  RAM at 78.1% — above comfortable range.
+
+# Sentinel Reasoning Engine output:
+→ 192.168.1.105 hit 52 unique ports in 5s.
+  Pattern matches aggressive Nmap -sS full scan or automated exploit framework.
+  Immediate block recommended.</pre>
+
+  <p>
+    The reasoning string is <strong>logged before the action executes</strong> — not after. This means
+    even if a block fails (e.g. iptables returns an error), the reasoning for why the block was
+    attempted is already in the log file.
+  </p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 5. THREAT TIERS -->
+<section id="threat-tiers">
+  <div class="section-label">05 — Threat Response</div>
+  <h2>Threat Response Tiers</h2>
+  <p>
+    When <code>NetSentinel</code> detects a threat, it creates a <code>ThreatSnapshot</code> and passes it
+    to the Brain via the callback. The Brain's <code>_handle_threat()</code> method routes the snapshot
+    through one of four response paths based on risk level.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Risk Level</th>
+        <th>Trigger</th>
+        <th>Response Method</th>
+        <th>Action</th>
+        <th>Operator Control</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-red">CRITICAL</span></td>
+        <td>50+ ports in 5s</td>
+        <td><code>_critical_response()</code></td>
+        <td>Instant <code>block_ip()</code> — no waiting, no prompt</td>
+        <td>None — fully autonomous</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">HIGH</span></td>
+        <td>25–49 ports in 5s</td>
+        <td><code>_high_response()</code></td>
+        <td>5-second countdown → auto-block on timeout</td>
+        <td>Press Enter during countdown to cancel</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-warn">MEDIUM</span></td>
+        <td>10–24 ports in 5s</td>
+        <td><code>_medium_response()</code></td>
+        <td>Log to terminal and <code>aegis_master.log</code></td>
+        <td>Monitoring only — no block</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">LOW</span></td>
+        <td>&lt;10 ports</td>
+        <td><code>_low_response()</code></td>
+        <td>Passive log only</td>
+        <td>No alert — background logging</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>The HIGH-Risk Semi-Auto Pattern</h3>
+  <p>
+    The 5-second countdown for HIGH-risk threats is implemented with a daemon input thread and
+    <code>threading.Event</code> — AEGIS never blocks the main loop waiting for the operator.
+  </p>
+  <pre>
+user_cancelled = threading.Event()
+
+def wait_for_input():
+    try:
+        input()            # blocks in its own thread
+        user_cancelled.set()
+    except Exception:
+        pass
+
+input_thread = threading.Thread(target=wait_for_input, daemon=True)
+input_thread.start()
+input_thread.join(timeout=HIGH_RISK_TIMEOUT)   # 5 seconds
+
+if user_cancelled.is_set():
+    # Operator pressed Enter — skip block
+else:
+    # Timeout expired — auto-block</pre>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 6. CROSS-PLATFORM -->
+<section id="crossplatform">
+  <div class="section-label">06 — Cross-Platform</div>
+  <h2>Cross-Platform Design</h2>
+  <p>
+    AEGIS is designed to run on both Linux (Parrot OS, Ubuntu, Debian) and Windows.
+    The platform detection happens once at import time in <code>firewall.py</code> and the result
+    propagates throughout the system.
+  </p>
+
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <div class="card-title">Linux / Parrot OS — LIVE mode</div>
+      <p>Full capabilities. Scapy sniffs raw packets via libpcap. iptables injects real kernel DROP rules. All modules active.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Windows — SIMULATION mode</div>
+      <p>Safe testing environment. Scapy requires Npcap — if missing, the Sentinel is skipped with a warning. All firewall actions are logged as <code>[SIM]</code> but never executed.</p>
+    </div>
+  </div>
+
+  <h3>Npcap Fallback (Windows)</h3>
+  <p>
+    The Sentinel boot is wrapped in a full exception ladder so AEGIS never crashes on Windows,
+    even if Npcap is not installed:
+  </p>
+  <pre>
+try:
+    from modules.net_sentinel import NetSentinel
+    self._sentinel = NetSentinel(...)
+    self._sentinel.start()
+except ImportError:
+    # Scapy not installed at all
+    log("Sniffer unavailable on this host.")
+except OSError as e:
+    if "Npcap" in str(e) or "WinPcap" in str(e):
+        # Scapy installed but no packet capture driver
+        log("Npcap not found. Install from https://npcap.com")
+    else:
+        log(f"Sniffer unavailable: {e}")
+except Exception as e:
+    # Catch-all — never crash the agent
+    log(f"Sniffer unavailable: {e}")</pre>
+
+  <h3>pathlib for Cross-Platform Paths</h3>
+  <p>
+    All log file paths use <code>pathlib.Path</code>. This means the same code
+    resolves correctly on both systems without any manual path handling:
+  </p>
+  <pre>
+BASE_DIR  = Path(__file__).resolve().parent
+LOG_DIR   = BASE_DIR / "logs"           # Works on C:\ and /home/
+AEGIS_LOG = LOG_DIR / "aegis_master.log"
+
+LOG_DIR.mkdir(parents=True, exist_ok=True)  # Auto-creates logs/ if missing</pre>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 7. INSTALL -->
+<section id="install">
+  <div class="section-label">07 — Installation</div>
+  <h2>Installation &amp; Setup</h2>
+
+  <h3>Linux / Parrot OS</h3>
+  <pre>
+# 1. Unzip the package
+unzip AEGIS_v1.0_ETCHERO.zip
+cd AEGIS
+
+# 2. Run the installer (creates venv + installs deps)
+chmod +x install.sh
+./install.sh
+
+# OR manually:
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt</pre>
+
+  <h3>Windows</h3>
+  <pre>
+# 1. Unzip AEGIS_v1.0_ETCHERO.zip
+# 2. Open Command Prompt in the AEGIS folder
+# 3. Run:
+install.bat
+
+# Optional: install Npcap for packet sniffing
+# https://npcap.com — download and run the installer
+
+# OR manually:
+python -m venv venv
+venv\Scripts\activate
+pip install psutil scapy</pre>
+
+  <h3>System Prerequisites</h3>
+  <table>
+    <thead><tr><th>Requirement</th><th>Platform</th><th>How to Get It</th></tr></thead>
+    <tbody>
+      <tr><td>Python 3.10+</td><td>Both</td><td><code>sudo apt install python3</code> or <a href="https://python.org" style="color:var(--accent2)">python.org</a></td></tr>
+      <tr><td>iptables</td><td>Linux only</td><td>Pre-installed on Parrot OS / most Debian systems</td></tr>
+      <tr><td>sudo / root</td><td>Linux only</td><td>Required for raw sockets and iptables</td></tr>
+      <tr><td>Npcap</td><td>Windows only (optional)</td><td><a href="https://npcap.com" style="color:var(--accent2)">npcap.com</a> — enables packet sniffing</td></tr>
+      <tr><td>libpcap</td><td>Linux only</td><td><code>sudo apt install libpcap-dev</code> (usually included)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 8. USAGE -->
+<section id="usage">
+  <div class="section-label">08 — Usage</div>
+  <h2>Running AEGIS</h2>
+
+  <h3>Full Agent (all modules)</h3>
+  <pre>
+# Linux — requires root for Scapy + iptables
+sudo venv/bin/python aegis.py
+
+# Windows — simulation mode, no root needed
+venv\Scripts\python aegis.py</pre>
+
+  <h3>Heartbeat Only (no root needed)</h3>
+  <pre>
+# Great for testing on low-privilege accounts
+venv/bin/python core/heartbeat.py</pre>
+
+  <h3>Sentinel Only (standalone test)</h3>
+  <pre>
+sudo venv/bin/python modules/net_sentinel.py</pre>
+
+  <h3>Simulate a Port Scan Against Yourself</h3>
+  <pre>
+# In terminal 1 — start AEGIS
+sudo venv/bin/python aegis.py
+
+# In terminal 2 — fire a scan at yourself (ethical testing only)
+nmap -sS 127.0.0.1
+
+# AEGIS should fire a CRITICAL or HIGH alert within 5 seconds</pre>
+
+  <div class="callout callout-danger">
+    <p><strong>Warning:</strong> Only ever run port scans against machines you own or have explicit written permission to test. Scanning third-party systems without authorization is illegal in most jurisdictions.</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 9. LOGS -->
+<section id="logs">
+  <div class="section-label">09 — Logs</div>
+  <h2>Log Files</h2>
+  <p>
+    All logs are written to the <code>logs/</code> directory, auto-created at first run.
+    Every log entry is timestamped. JSON-structured logs can be parsed by any log analysis tool.
+  </p>
+
+  <table>
+    <thead><tr><th>File</th><th>Format</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>aegis_master.log</code></td>
+        <td>Plain text</td>
+        <td>Every threat detected, every block decision, every startup/shutdown event. The main audit trail.</td>
+      </tr>
+      <tr>
+        <td><code>aegis_health.log</code></td>
+        <td>JSON lines</td>
+        <td>One <code>SystemSnapshot</code> JSON object per heartbeat pulse. CPU, RAM, net, score, reasoning.</td>
+      </tr>
+      <tr>
+        <td><code>sentinel.log</code></td>
+        <td>JSON lines</td>
+        <td>One <code>ThreatSnapshot</code> JSON object per threat detected. Full attacker detail.</td>
+      </tr>
+      <tr>
+        <td><code>firewall.log</code></td>
+        <td>Plain text</td>
+        <td>Every block/unblock action. Live actions show the real iptables result. Simulated actions are tagged <code>[SIM]</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Example JSON Lines (sentinel.log)</h4>
+  <pre>
+{"timestamp": "2026-04-04T14:32:11.245", "attacker_ip": "45.33.32.156",
+ "ports_hit": [22, 80, 443, 8080, ...], "port_count": 52,
+ "risk_level": "CRITICAL", "threat_type": "SYN_SCAN",
+ "reasoning": "45.33.32.156 hit 52 unique ports in 5s. Matches aggressive Nmap -sS scan.",
+ "action_taken": "FLAG_FOR_AUTOBLOCK", "iptables_ready": true}</pre>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 10. DEPS -->
+<section id="deps">
+  <div class="section-label">10 — Dependencies</div>
+  <h2>Dependencies</h2>
+
+  <table>
+    <thead><tr><th>Package</th><th>Version</th><th>Purpose</th><th>Platform</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>psutil</code></td>
+        <td>&gt;= 5.9.0</td>
+        <td>Cross-platform CPU, RAM, disk, and network I/O metrics. Also enumerates active network connections.</td>
+        <td>Both</td>
+      </tr>
+      <tr>
+        <td><code>scapy</code></td>
+        <td>&gt;= 2.5.0</td>
+        <td>Raw packet capture and dissection. Requires libpcap on Linux, Npcap on Windows.</td>
+        <td>Both (with drivers)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>All standard library modules used: <code>platform</code>, <code>threading</code>, <code>subprocess</code>, <code>pathlib</code>, <code>logging</code>, <code>dataclasses</code>, <code>collections</code>, <code>time</code>, <code>datetime</code>, <code>json</code>, <code>sys</code>. No additional installs needed for these.</p>
+
+  <pre>
+# Install all Python dependencies in one command:
+pip install -r requirements.txt</pre>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 11. EXTEND -->
+<section id="extend">
+  <div class="section-label">11 — Extending AEGIS</div>
+  <h2>Extending AEGIS</h2>
+  <p>
+    AEGIS is designed to grow. Every module follows the same pattern:
+    a class with a <code>start()</code>/<code>stop()</code> interface, a callback for emitting events,
+    and a <code>@dataclass</code> for structured output. To add a new module:
+  </p>
+  <ol style="color:var(--text2); padding-left:1.5rem; margin-bottom:1.5rem;">
+    <li style="margin-bottom:.75rem;">Create <code>modules/your_module.py</code> with a class that accepts an <code>on_event</code> callback.</li>
+    <li style="margin-bottom:.75rem;">Define a dataclass for your event (e.g. <code>ProcessSnapshot</code>).</li>
+    <li style="margin-bottom:.75rem;">In <code>aegis.py</code>, add a <code>_boot_your_module()</code> method following the same try/except pattern as <code>_boot_sentinel()</code>.</li>
+    <li style="margin-bottom:.75rem;">Push events onto <code>self._threat_queue</code> (or a new queue) inside the callback.</li>
+    <li style="margin-bottom:.75rem;">Handle the new event type in <code>_handle_threat()</code> or a new handler method.</li>
+  </ol>
+
+  <h3>Planned Future Modules</h3>
+  <table>
+    <thead><tr><th>Module</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>process_guard.py</code></td><td>Monitor running processes. Kill crypto-miners, known malware process names, or any process exceeding CPU/RAM thresholds.</td></tr>
+      <tr><td><code>dns_watch.py</code></td><td>Watch DNS queries for known C2 domains. Alert on DNS tunneling patterns.</td></tr>
+      <tr><td><code>file_integrity.py</code></td><td>Hash critical system files at boot. Alert if they change on disk.</td></tr>
+      <tr><td><code>aegis_api.py</code></td><td>REST API layer over AEGIS — allows remote monitoring dashboard and webhook alerts.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ 12. GLOSSARY -->
+<section id="glossary">
+  <div class="section-label">12 — Glossary</div>
+  <h2>Glossary</h2>
+  <table>
+    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+    <tbody>
+      <tr><td><strong>SYN Scan</strong></td><td>A network reconnaissance technique (also called a stealth scan) where an attacker sends TCP SYN packets to many ports to discover which are open, without completing the handshake.</td></tr>
+      <tr><td><strong>iptables</strong></td><td>The Linux kernel's built-in packet filtering firewall. AEGIS appends DROP rules to the INPUT chain to block attacker IPs at the network level.</td></tr>
+      <tr><td><strong>Scapy</strong></td><td>A Python library for crafting and capturing raw network packets. AEGIS uses it in read-only passive mode to sniff TCP SYN packets.</td></tr>
+      <tr><td><strong>BPF Filter</strong></td><td>Berkeley Packet Filter — a kernel-level filter that tells Scapy to only pass TCP packets to AEGIS, ignoring all other traffic for performance.</td></tr>
+      <tr><td><strong>ThreatSnapshot</strong></td><td>A Python dataclass representing one detected threat event. Contains attacker IP, ports hit, risk level, reasoning, and recommended action.</td></tr>
+      <tr><td><strong>SystemSnapshot</strong></td><td>A Python dataclass representing one Heartbeat pulse. Contains CPU%, RAM%, network speeds, health score, status, and reasoning.</td></tr>
+      <tr><td><strong>Daemon Thread</strong></td><td>A Python thread that automatically dies when the main program exits. Both the Heartbeat and Sentinel run as daemon threads so Ctrl+C cleanly stops everything.</td></tr>
+      <tr><td><strong>Reasoning Engine</strong></td><td>The class in each AEGIS module that converts raw metrics into human-readable explanations. Produces a reasoning string before every action.</td></tr>
+      <tr><td><strong>Simulation Mode</strong></td><td>AEGIS's Windows-compatible operating mode. All firewall actions are logged with a [SIM] tag but no actual system calls are made.</td></tr>
+      <tr><td><strong>Npcap</strong></td><td>A Windows packet capture driver required by Scapy to access raw network sockets. Equivalent of libpcap on Linux.</td></tr>
+      <tr><td><strong>psutil</strong></td><td>A cross-platform Python library for accessing system utilization info — CPU, memory, disks, network, processes.</td></tr>
+      <tr><td><strong>pathlib</strong></td><td>Python's built-in object-oriented filesystem path library. AEGIS uses it so all log paths work correctly on both Windows and Linux.</td></tr>
+      <tr><td><strong>C2 / Command and Control</strong></td><td>A server used by malware to receive instructions and exfiltrate data. An outbound traffic spike may indicate a compromised host communicating with a C2.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ FOOTER -->
+<footer>
+  <div>PROJECT AEGIS — Technical Documentation v1.0</div>
+  <div>Built by <span class="accent">ETCHERO</span> / Abdul-Hameed &nbsp;·&nbsp; Lead Architect</div>
+  <div style="margin-top:.5rem; font-size:11px;">
+    Python 3.10+ &nbsp;·&nbsp; psutil &nbsp;·&nbsp; scapy &nbsp;·&nbsp; iptables &nbsp;·&nbsp; Parrot OS
+  </div>
+</footer>
+
+</body>
+</html>
