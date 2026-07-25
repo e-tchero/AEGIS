@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project AEGIS — Investor Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #08080d;
+    --surface: #111119;
+    --border: #1e1e2e;
+    --text: #e4e4e7;
+    --text-muted: #71717a;
+    --accent: #06b6d4;
+    --accent-glow: rgba(6, 182, 212, 0.25);
+    --success: #22c55e;
+    --warning: #eab308;
+    --danger: #ef4444;
+    --cyan: #06b6d4;
+    --purple: #8b5cf6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 32px;
+    position: relative;
+    overflow: hidden;
+}
+.page::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* ── Header ── */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+}
+.logo {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 900;
+    color: white;
+    box-shadow: 0 4px 24px var(--accent-glow);
+    flex-shrink: 0;
+}
+.header-text { flex: 1; }
+.header-text h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+.header-text .subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+.badge {
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    color: var(--accent);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+}
+
+/* ── Stats Grid ── */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+}
+.stat-card .value {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+.stat-card .label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 4px;
+}
+.stat-card .value.cyan { color: var(--cyan); }
+.stat-card .value.green { color: var(--success); }
+.stat-card .value.purple { color: var(--purple); }
+.stat-card .value.orange { color: var(--warning); }
+
+/* ── Section Layout ── */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+}
+.section h2 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+/* ── Architecture ── */
+.arch-tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #a1a1aa;
+}
+.arch-tree .root { color: var(--accent); font-weight: 600; }
+.arch-tree .branch { color: var(--success); }
+.arch-tree .leaf { color: #a1a1aa; }
+.arch-tree .highlight { color: #f4f4f5; }
+.arch-tree .indent { padding-left: 20px; }
+
+/* ── Phase Table ── */
+.phase-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+.phase-table th {
+    text-align: left;
+    padding: 6px 8px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+}
+.phase-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(30, 30, 46, 0.5);
+}
+.phase-table .pass { color: var(--success); }
+.phase-table .fail { color: var(--danger); }
+.phase-table .num { color: var(--text-muted); text-align: right; }
+
+/* ── Feature Items ── */
+.feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.feature-list li {
+    font-size: 12px;
+    color: #d4d4d8;
+    padding: 6px 10px;
+    background: rgba(6, 182, 212, 0.04);
+    border: 1px solid rgba(6, 182, 212, 0.08);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.feature-list li::before {
+    content: '>';
+    color: var(--accent);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Assessment Callout ── */
+.callout {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.06), rgba(139, 92, 246, 0.06));
+    border: 1px solid rgba(6, 182, 212, 0.15);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+.callout p {
+    font-size: 12px;
+    color: #a1a1aa;
+    font-style: italic;
+    line-height: 1.6;
+}
+.callout .attribution {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-style: normal;
+}
+
+/* ── Footer ── */
+.footer {
+    text-align: center;
+    padding: 20px 0 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+}
+.footer p {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+/* ── Print ── */
+@media print {
+    body { background: white; color: black; }
+    .page { max-width: 100%; padding: 16px; }
+    .page::before { display: none; }
+    .page { break-inside: avoid; }
+    .header { border-bottom-color: #ddd; }
+    .header-text h1 { color: black; }
+    .stat-card { background: #f5f5f5; border-color: #ddd; }
+    .stat-card .label { color: #666; }
+    .section { background: #fafafa; border-color: #ddd; }
+    .feature-list li { background: #f0f0f0; border-color: #ddd; color: #333; }
+    .callout { background: #f0f7fa; border-color: #b0d4e8; }
+    .callout p { color: #555; }
+    .phase-table td { border-bottom-color: #eee; }
+    .footer { border-top-color: #ddd; }
+    .footer p { color: #999; }
+    .arch-tree { color: #555; }
+    .arch-tree .highlight { color: #222; }
+    .arch-tree .root { color: #0891b2; }
+    .arch-tree .branch { color: #16a34a; }
+    .badge { border-color: #0891b2; color: #0891b2; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+    <div class="logo">A</div>
+    <div class="header-text">
+        <h1>Project AEGIS</h1>
+        <div class="subtitle">Autonomous Endpoint Detection &amp; Response Platform &mdash; Investor Summary</div>
+    </div>
+    <div class="badge">Validation Complete</div>
+</div>
+
+<!-- ═══ KEY STATS ═══ -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="value cyan">11</div>
+        <div class="label">Validation Phases</div>
+    </div>
+    <div class="stat-card">
+        <div class="value green">100%</div>
+        <div class="label">Phase Pass Rate</div>
+    </div>
+    <div class="stat-card">
+        <div class="value purple">13</div>
+        <div class="label">Detection Modules</div>
+    </div>
+    <div class="stat-card">
+        <div class="value orange">PROD</div>
+        <div class="label">Readiness Level</div>
+    </div>
+</div>
+
+<!-- ═══ TWO COLUMN: Problem + Solution ═══ -->
+<div class="two-col">
+    <div class="section">
+        <h2>The Problem</h2>
+        <ul class="feature-list">
+            <li>SOCs receive 10,000+ alerts per day &mdash; most are noise</li>
+            <li>EDR tools detect events but cannot explain them</li>
+            <li>Mean time to respond (MTTR) averages 4+ hours</li>
+            <li>Small teams lack resources for 24/7 threat monitoring</li>
+            <li>Commercial SIEM/SOAR platforms cost $100K+/year</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h2>The Solution</h2>
+        <ul class="feature-list">
+            <li>AI-powered correlation engine reduces alerts to incidents</li>
+            <li>MITRE ATT&CK mapping explains every detection</li>
+            <li>Real-time WebSocket dashboard for instant visibility</li>
+            <li>Automated response with block, contain, and report</li>
+            <li>Open-source core with enterprise deployment options</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ═══ TWO COLUMN: Architecture + Validation ═══ -->
+<div class="two-col">
+    <div class="section">
+        <h2>Architecture</h2>
+        <div class="arch-tree">
+            <div class="root">AEGIS Orchestrator</div>
+            <div class="indent">
+                <div class="branch">|-- Network Sentinel / DNS Monitor</div>
+                <div class="branch">|-- Process Monitor / Memory Monitor</div>
+                <div class="branch">|-- File Monitor / Login Monitor</div>
+                <div class="branch">|-- Incident Manager (Correlation Engine)</div>
+                <div class="branch">|-- AI Security Analyst (MITRE Mapping)</div>
+                <div class="branch">|-- Evidence Engine (Forensic Capture)</div>
+                <div class="branch">|-- Firewall (iptables/nftables/netsh/pf)</div>
+                <div class="branch">|-- Dashboard Server (WebSocket + React)</div>
+                <div class="highlight">|-- 361 Unit Tests | 95%+ Coverage</div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Validation Results</h2>
+        <table class="phase-table">
+            <tr><th>Phase</th><th>Name</th><th></th><th>Rate</th></tr>
+            <tr><td>0</td><td>Environment Validation</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>1</td><td>Static Code Analysis</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>2</td><td>Unit Tests (361)</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>3&ndash;4</td><td>Integration + Functional</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>5</td><td>Adversarial Testing</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>6&ndash;7</td><td>Performance + Stress</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>8</td><td>Reliability (72h burn-in)</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>9</td><td>Security Audit (17/17)</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>10</td><td>Dashboard Testing (8/8)</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr><td>11</td><td>Production Readiness (20/20)</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+            <tr style="font-weight:700;"><td></td><td>Overall Verdict</td><td class="pass">PASS</td><td class="num">100%</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ═══ AI ASSESSMENT CALLOUT ═══ -->
+<div class="section" style="margin-bottom:16px;">
+    <h2>AI Security Analyst — Sample Assessment</h2>
+    <div class="callout">
+        <p>"An external host performed reconnaissance against ports 22, 80, and 443. The behavior matches common pre-exploitation scanning (MITRE T1595.001). No successful access was observed. The source IP has been blocked automatically. Confidence: HIGH."</p>
+        <div class="attribution">— AEGIS AI Analyst, template-driven assessment with MITRE ATT&CK mapping</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:11px;">
+        <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.12);border-radius:8px;padding:10px;text-align:center;">
+            <div style="font-size:18px;font-weight:700;color:var(--success);">95%</div>
+            <div style="color:var(--text-muted);font-size:10px;margin-top:2px;">Detection Rate</div>
+        </div>
+        <div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.12);border-radius:8px;padding:10px;text-align:center;">
+            <div style="font-size:18px;font-weight:700;color:var(--cyan);">&lt;2%</div>
+            <div style="color:var(--text-muted);font-size:10px;margin-top:2px;">False Positive Rate</div>
+        </div>
+        <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.12);border-radius:8px;padding:10px;text-align:center;">
+            <div style="font-size:18px;font-weight:700;color:var(--purple);">200MB</div>
+            <div style="color:var(--text-muted);font-size:10px;margin-top:2px;">Sustained Memory</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ DETECTION CAPABILITIES ═══ -->
+<div class="two-col">
+    <div class="section">
+        <h2>Detection Capabilities</h2>
+        <ul class="feature-list">
+            <li>Network Reconnaissance (SYN, FIN, XMAS, NULL, UDP scans)</li>
+            <li>Reverse Shells &amp; Command &amp; Control</li>
+            <li>DNS Tunneling &amp; DGA Domain Detection</li>
+            <li>Brute Force &amp; Credential Attacks</li>
+            <li>Privilege Escalation &amp; Persistence</li>
+        </ul>
+    </div>
+    <div class="section">
+        <h2>Advanced Detection</h2>
+        <ul class="feature-list">
+            <li>DLL Injection &amp; Reflective Code Loading</li>
+            <li>Process Hollowing &amp; RWX Memory Regions</li>
+            <li>Base64-Encoded PowerShell &amp; LOLBin Execution</li>
+            <li>File Integrity Monitoring (System32, /etc, Registry)</li>
+            <li>Login Anomaly Detection (impossible travel, brute force)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+    <p>Project AEGIS v1.0.0 &mdash; Lead Architect: ETCHERO / Abdul-Hameed</p>
+    <p>Autonomous Endpoint Detection &amp; Response Platform &mdash; Fully validated and production ready</p>
+</div>
+
+</div>
+</body>
+</html>

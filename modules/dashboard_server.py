@@ -38,7 +38,7 @@ import threading
 import time
 from dataclasses import asdict
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
@@ -46,6 +46,7 @@ from typing import Any, Dict, List, Optional, Set
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     DASHBOARD_WS_HOST,
     DASHBOARD_WS_PORT,
     DASHBOARD_LOG_FILE,
@@ -58,7 +59,7 @@ from config import (  # noqa: E402
 # ─── LOGGER ───────────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.dashboard")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(DASHBOARD_LOG_FILE) if DASHBOARD_LOG_FILE else "logs/dashboard.log",
         maxBytes=DASHBOARD_LOG_MAX_BYTES or 5 * 1024 * 1024,
         backupCount=DASHBOARD_LOG_BACKUP_COUNT or 3,

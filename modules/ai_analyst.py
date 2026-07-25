@@ -26,7 +26,7 @@ Role: Takes correlated incidents from the Incident Manager and produces
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
@@ -35,6 +35,7 @@ from typing import Dict, List, Optional, Set, Tuple
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     AI_LOG_FILE,
     LOG_MAX_BYTES,
     LOG_BACKUP_COUNT,
@@ -44,7 +45,7 @@ from config import (  # noqa: E402
 # ─── LOGGER ───────────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.analyst")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(AI_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,

@@ -24,7 +24,7 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from threading import Lock
 from typing import Any, Callable, Dict, List, Optional, Set
@@ -33,6 +33,7 @@ from typing import Any, Callable, Dict, List, Optional, Set
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     INCIDENT_LOG_FILE,
     CORRELATION_TIMEOUT_SECONDS,
     AUTO_CLOSE_MINUTES,
@@ -45,7 +46,7 @@ from config import (  # noqa: E402
 # ─── LOGGER ───────────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.incident")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(INCIDENT_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,
@@ -132,6 +133,20 @@ class IncidentManager:
         self._stop_event = threading.Event()
         self._housekeeping_thread: Optional[threading.Thread] = None
 
+    # ── Input Sanitization ──────────────────────────────────────────────────
+
+    @staticmethod
+    def _sanitize_string(value: str, max_length: int = 500) -> str:
+        """Sanitize a string for safe storage (XSS prevention).
+
+        Strips HTML tags by escaping angle brackets, and truncates
+        to prevent abuse. Returns empty string for None/non-string.
+        """
+        if not isinstance(value, str):
+            return str(value) if value is not None else ""
+        escaped = value.replace("<", "&lt;").replace(">", "&gt;")
+        return escaped[:max_length]
+
     # ── Correlation Key Extraction ───────────────────────────────────────────
 
     @staticmethod
@@ -139,6 +154,7 @@ class IncidentManager:
         """Extract correlation keys from any threat object.
 
         Returns a dict with keys: ips, pids, process_names, file_paths, usernames, source
+        All string values are sanitized for XSS prevention.
         """
         keys: Dict[str, Any] = {
             "ips": set(),
@@ -149,32 +165,34 @@ class IncidentManager:
             "source": "unknown",
         }
 
+        sanitize = IncidentManager._sanitize_string
+
         # Network threats
         if hasattr(snap, "attacker_ip") and snap.attacker_ip:
-            keys["ips"].add(snap.attacker_ip)
+            keys["ips"].add(sanitize(snap.attacker_ip))
             keys["source"] = "network"
 
         # Login threats
         if hasattr(snap, "source_ip") and snap.source_ip:
-            keys["ips"].add(snap.source_ip)
+            keys["ips"].add(sanitize(snap.source_ip))
             keys["source"] = "login"
         if hasattr(snap, "username") and snap.username:
-            keys["usernames"].add(snap.username)
+            keys["usernames"].add(sanitize(snap.username))
 
         # Process threats
         if hasattr(snap, "pid") and snap.pid:
             keys["pids"].add(snap.pid)
             keys["source"] = "process"
         if hasattr(snap, "process_name") and snap.process_name:
-            keys["process_names"].add(snap.process_name)
+            keys["process_names"].add(sanitize(snap.process_name))
         if hasattr(snap, "parent_pid") and snap.parent_pid:
             keys["pids"].add(snap.parent_pid)
         if hasattr(snap, "parent_name") and snap.parent_name:
-            keys["process_names"].add(snap.parent_name)
+            keys["process_names"].add(sanitize(snap.parent_name))
 
         # File threats
         if hasattr(snap, "file_path") and snap.file_path:
-            keys["file_paths"].add(snap.file_path)
+            keys["file_paths"].add(sanitize(snap.file_path))
             keys["source"] = "file"
 
         return keys

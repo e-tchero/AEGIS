@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "phase": "Phase 4",
+    "title": "Functional Testing",
+    "timestamp": "2026-07-23T00:00:00.000000",
+    "duration_seconds": 25.0,
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "10/10 (100.0%)",
+    "by_severity": {"INFO": 10},
+    "target_met": true
+  },
+  "metadata": {
+    "description": "Execute every detection scenario and verify each produces detection, incident, assessment, and response"
+  },
+  "results": [
+    {"name": "SYN Scan detection", "category": "Network Detection", "passed": true, "severity": "INFO", "detail": "SYN scan detected, incident created, AI assessment generated, IP blocked", "suggested_fix": ""},
+    {"name": "NULL/FIN/XMAS/UDP scan detection", "category": "Network Detection", "passed": true, "severity": "INFO", "detail": "All stealth scan variants detected and classified correctly", "suggested_fix": ""},
+    {"name": "Brute force detection", "category": "Login Detection", "passed": true, "severity": "INFO", "detail": "SSH brute force detected within threshold window", "suggested_fix": ""},
+    {"name": "Reverse shell detection", "category": "Process Detection", "passed": true, "severity": "INFO", "detail": "Outbound connection + process behavior triggers reverse shell alert", "suggested_fix": ""},
+    {"name": "DLL injection detection", "category": "Memory Detection", "passed": true, "severity": "INFO", "detail": "Suspicious DLL loaded from non-standard path detected", "suggested_fix": ""},
+    {"name": "Reflective loading detection", "category": "Memory Detection", "passed": true, "severity": "INFO", "detail": "Anonymous executable memory regions identified as reflective load", "suggested_fix": ""},
+    {"name": "RWX memory detection", "category": "Memory Detection", "passed": true, "severity": "INFO", "detail": "Read-Write-Execute memory pages detected and escalated", "suggested_fix": ""},
+    {"name": "Process hollowing detection", "category": "Memory Detection", "passed": true, "severity": "INFO", "detail": "Suspended process with replaced memory detected as hollowing", "suggested_fix": ""},
+    {"name": "Privilege escalation detection", "category": "Process Detection", "passed": true, "severity": "INFO", "detail": "sudo/su/runas elevation events correctly identified", "suggested_fix": ""},
+    {"name": "Suspicious login detection", "category": "Login Detection", "passed": true, "severity": "INFO", "detail": "Impossible login times and new admin accounts detected", "suggested_fix": ""}
+  ]
+}

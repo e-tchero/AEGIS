@@ -16,7 +16,7 @@ import os
 import shutil
 import subprocess  # nosec B404
 import threading
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from typing import List, Optional, Set, Type
 
@@ -24,9 +24,10 @@ from typing import List, Optional, Set, Type
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     FIREWALL_BACKEND,
     FIREWALL_TIMEOUT,
-    FIREWALL_LOG_FILE,
+    FIREWALL_BACKEND_LOG_FILE,
     LOG_MAX_BYTES,
     LOG_BACKUP_COUNT,
     LOG_FORMAT,
@@ -36,8 +37,8 @@ from config import (  # noqa: E402
 # ─── LOGGER SETUP ─────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.firewall.backend")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
-        str(FIREWALL_LOG_FILE),
+    _handler = SafeRotatingFileHandler(
+        str(FIREWALL_BACKEND_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,
         encoding="utf-8",

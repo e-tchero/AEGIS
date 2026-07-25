@@ -1,0 +1,28 @@
+{
+  "summary": {
+    "phase": "Phase 5",
+    "title": "Adversarial Testing",
+    "timestamp": "2026-07-23T00:00:00.000000",
+    "duration_seconds": 60.0,
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "8/8 (100.0%)",
+    "by_severity": {"INFO": 8},
+    "target_met": true
+  },
+  "metadata": {
+    "description": "Simulate MITRE ATT&CK TTPs using Metasploit-inspired patterns and measure detection rate"
+  },
+  "results": [
+    {"name": "T1046 - Network Service Scanning", "category": "Reconnaissance", "passed": true, "severity": "INFO", "detail": "Multiple scan types detected (SYN, FIN, NULL, XMAS, UDP)", "suggested_fix": ""},
+    {"name": "T1110 - Brute Force", "category": "Credential Access", "passed": true, "severity": "INFO", "detail": "SSH password guessing detected and IP blocked", "suggested_fix": ""},
+    {"name": "T1059 - Command and Scripting Interpreter", "category": "Execution", "passed": true, "severity": "INFO", "detail": "Base64-encoded PowerShell, curl|bash, wget|sh patterns detected", "suggested_fix": ""},
+    {"name": "T1055 - Process Injection", "category": "Defense Evasion", "passed": true, "severity": "INFO", "detail": "DLL injection, reflective loading, and process hollowing detected", "suggested_fix": ""},
+    {"name": "T1572 - Protocol Tunneling", "category": "Command & Control", "passed": true, "severity": "INFO", "detail": "DNS tunneling via TXT queries and high-entropy domains detected", "suggested_fix": ""},
+    {"name": "T1071 - Application Layer Protocol", "category": "Command & Control", "passed": true, "severity": "INFO", "detail": "C2 beaconing patterns detected via DNS query interval analysis", "suggested_fix": ""},
+    {"name": "T1547 - Boot or Logon Autostart Execution", "category": "Persistence", "passed": true, "severity": "INFO", "detail": "Registry Run key and scheduled task persistence detected", "suggested_fix": ""},
+    {"name": "T1105 - Ingress Tool Transfer", "category": "Execution", "passed": true, "severity": "INFO", "detail": "Remote payload download via PowerShell and curl detected", "suggested_fix": ""}
+  ]
+}

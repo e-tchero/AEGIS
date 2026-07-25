@@ -15,7 +15,7 @@ import threading
 import time
 from dataclasses import dataclass, asdict, field
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from threading import Event
 from typing import Callable, Dict, List, Optional
@@ -24,6 +24,7 @@ from typing import Callable, Dict, List, Optional
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     FILE_MONITOR_INTERVAL,
     FILE_LOG_FILE,
     FILE_BASELINE_FILE,
@@ -38,7 +39,7 @@ from config import (  # noqa: E402
 # ─── LOGGER ───────────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.fim")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(FILE_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,

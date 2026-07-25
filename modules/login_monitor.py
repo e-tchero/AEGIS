@@ -16,7 +16,7 @@ import traceback
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from threading import Event
 from typing import Callable, Dict, List, Optional, Set
@@ -25,6 +25,7 @@ from typing import Callable, Dict, List, Optional, Set
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     LOGIN_POLL_INTERVAL,
     LOGIN_LOG_FILE,
     LINUX_AUTH_LOGS,
@@ -40,7 +41,7 @@ from config import (  # noqa: E402
 # ─── LOGGER ───────────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.logmon")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(LOGIN_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,

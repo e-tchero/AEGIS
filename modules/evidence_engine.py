@@ -30,7 +30,7 @@ import logging
 import os
 from dataclasses import dataclass, asdict, field
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -40,6 +40,7 @@ import psutil
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     LOG_DIR,
     EVIDENCE_DIR,
     LOG_MAX_BYTES,
@@ -50,7 +51,7 @@ from config import (  # noqa: E402
 # ─── LOGGER ───────────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.evidence")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(LOG_DIR / "evidence_engine.log"),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,
@@ -132,7 +133,15 @@ class EvidenceEngine:
 
     @classmethod
     def configure(cls, evidence_dir: Path, max_files: int = 1000) -> None:
-        """Configure evidence storage."""
+        """Configure evidence storage.
+
+        Validates that the provided path is a real directory and does not
+        contain path traversal components.
+        """
+        evidence_str = str(evidence_dir)
+        if ".." in evidence_str.split(os.sep):
+            _logger.error(f"Path traversal attempt blocked in evidence_dir: {evidence_dir}")
+            raise ValueError(f"Invalid evidence directory path: {evidence_dir}")
         cls.EVIDENCE_DIR = evidence_dir
         cls.MAX_EVIDENCE_FILES = max_files
         cls.EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
@@ -490,6 +499,17 @@ class EvidenceEngine:
             safe_type = package.threat_type.lower().replace(" ", "_").replace("/", "_")
             filename = f"{timestamp}_{safe_type}_{package.threat_id}.json"
             filepath = cls.EVIDENCE_DIR / filename
+
+            # Defense-in-depth: verify resolved path is within EVIDENCE_DIR
+            try:
+                resolved = filepath.resolve()
+                evidence_resolved = cls.EVIDENCE_DIR.resolve()
+                if evidence_resolved not in resolved.parents and resolved != evidence_resolved:
+                    _logger.error(f"Path traversal blocked: {filename} resolves outside EVIDENCE_DIR")
+                    return None
+            except (OSError, RuntimeError) as e:
+                _logger.error(f"Path resolution failed for {filename}: {e}")
+                return None
 
             # Write evidence
             filepath.write_text(

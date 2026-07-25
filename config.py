@@ -6,7 +6,11 @@ Version: 1.1.0 | Classification: AEGIS-CONFIG
 All tunable parameters live here — no more hardcoded values in modules.
 """
 
+import os
 import platform
+import shutil
+import time
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 # ─── PATHS ───────────────────────────────────────────────────────────────────
@@ -51,6 +55,8 @@ BLOCKED_IPS_FILE = CONFIG_DIR / "blocked_ips.json"
 MAX_BLOCKED_IPS = 5000        # safety cap
 
 FIREWALL_LOG_FILE = LOG_DIR / "firewall.log"
+FIREWALL_BACKEND_LOG_FILE = LOG_DIR / "firewall_backend.log"
+
 FIREWALL_TIMEOUT = 8          # seconds for firewall commands
 FIREWALL_BACKEND = None       # Set to "iptables", "nftables", "netsh", "pf", or "simulation" to override auto-detect
 
@@ -360,6 +366,55 @@ DASHBOARD_LOG_FILE = LOG_DIR / "dashboard.log"
 DASHBOARD_POLL_INTERVAL = 3           # seconds between state broadcasts
 DASHBOARD_LOG_MAX_BYTES = 5 * 1024 * 1024
 DASHBOARD_LOG_BACKUP_COUNT = 3
+
+# ─── SAFE ROTATING FILE HANDLER ─────────────────────────────────────────────
+class SafeRotatingFileHandler(RotatingFileHandler):
+    """RotatingFileHandler that gracefully handles Windows PermissionError
+    during log rotation by retrying with backoff and falling back to
+    copytruncate-style rotation on Windows.
+    """
+
+    MAX_RETRIES = 3
+    RETRY_DELAY = 0.2  # seconds
+
+    def doRollover(self):
+        """Override doRollover with retry logic for Windows file locks."""
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                super().doRollover()
+                return
+            except PermissionError:
+                if attempt < self.MAX_RETRIES - 1:
+                    time.sleep(self.RETRY_DELAY * (attempt + 1))
+                else:
+                    self._copytruncate_rollover()
+
+    def _copytruncate_rollover(self):
+        """Fallback rotation strategy: copy file and truncate original.
+        Works on Windows because it does not require renaming an open file.
+        """
+        try:
+            self.close()
+            base_filename = self.baseFilename
+            for i in range(self.backupCount - 1, 0, -1):
+                src = f"{base_filename}.{i}"
+                dst = f"{base_filename}.{i + 1}"
+                if os.path.exists(src):
+                    if os.path.exists(dst):
+                        os.remove(dst)
+                    shutil.copy2(src, dst)
+            if os.path.exists(base_filename):
+                dst = f"{base_filename}.1"
+                if os.path.exists(dst):
+                    os.remove(dst)
+                shutil.copy2(base_filename, dst)
+            with open(base_filename, "w"):
+                pass
+            self.stream = open(base_filename, "a", encoding=self.encoding)
+        except Exception:
+            if self.stream:
+                self.stream.close()
+            self.stream = open(self.baseFilename, "a", encoding=self.encoding)
 
 # ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
 NOTIFY_ON_LEVELS = {"CRITICAL", "HIGH"}  # which threat levels trigger notifications
