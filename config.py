@@ -4,21 +4,100 @@ Lead Architect: ETCHERO / Abdul-Hameed
 Version: 1.1.0 | Classification: AEGIS-CONFIG
 
 All tunable parameters live here — no more hardcoded values in modules.
+
+Data Persistence Strategy (Windows):
+  Development mode:   Project root directory
+  PyInstaller bundle: %%PROGRAMDATA%%\AEGIS (or %%LOCALAPPDATA%%\AEGIS fallback)
+
+  This ensures logs, blocked IPs, evidence, and baselines survive
+  across application restarts and are NOT stored inside the PyInstaller
+  temporary extraction directory (_MEIPASS) which is cleaned by the OS.
 """
 
 import os
 import platform
 import shutil
+import sys
 import time
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-# ─── PATHS ───────────────────────────────────────────────────────────────────
-BASE_DIR = Path(__file__).resolve().parent
-LOG_DIR  = BASE_DIR / "logs"
-CONFIG_DIR = BASE_DIR / "config"
-CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+# ─── PERSISTENT DATA DIRECTORY ────────────────────────────────────────────────
+
+def _get_data_dir() -> Path:
+    """Return the persistent AEGIS data directory.
+
+    Strategy (PyInstaller bundle only):
+      1. Try %%PROGRAMDATA%%\AEGIS (all-users) — may fail if non-admin
+      2. Fall back to %%LOCALAPPDATA%%\AEGIS (per-user, always writable)
+      3. Final fallback to ~\.aegis
+
+    Each candidate is probe-written immediately (mkdir) so that
+    PermissionError is caught and the next candidate is tried.
+
+    In development mode (unfrozen), uses the project root so existing
+    behaviour is unchanged. No probe-write is needed since the project
+    root already exists.
+    """
+    if not getattr(sys, "frozen", False):
+        return Path(__file__).resolve().parent
+
+    # --- Candidates in priority order ---
+    candidates: list[Path] = []
+
+    pd = os.environ.get("PROGRAMDATA")
+    if pd and os.path.isabs(pd):
+        candidates.append(Path(pd) / "AEGIS")
+
+    lad = os.environ.get("LOCALAPPDATA")
+    if lad and os.path.isabs(lad):
+        candidates.append(Path(lad) / "AEGIS")
+
+    # Final safety net
+    candidates.append(Path.home() / ".aegis")
+
+    for candidate in candidates:
+        try:
+            candidate.mkdir(parents=True, exist_ok=True)
+            return candidate
+        except (PermissionError, OSError):
+            continue
+
+    # Should never reach here
+    return candidates[-1]
+
+
+def _init_data_dirs(data_dir: Path) -> None:
+    """Create the persistent data directory tree and seed bundled assets.
+
+    data_dir itself was already created by _get_data_dir() above, so
+    creating sub-directories should not fail (they inherit the parent's
+    ACL on Windows).
+    """
+    subdirs = ["logs", "config", "evidence"]
+    for name in subdirs:
+        (data_dir / name).mkdir(parents=True, exist_ok=True)
+
+    # On first run from a PyInstaller bundle, seed file_baseline.json
+    # from the bundled assets inside _MEIPASS into the persistent location.
+    if getattr(sys, "frozen", False):
+        meipass = getattr(sys, "_MEIPASS", None)
+        if meipass:
+            bundled = Path(meipass) / "config" / "file_baseline.json"
+            if bundled.exists():
+                target = data_dir / "config" / "file_baseline.json"
+                if not target.exists():
+                    shutil.copy2(str(bundled), str(target))
+
+
+# ─── EVALUATE PERSISTENT PATHS ────────────────────────────────────────────────
+BASE_DIR = _get_data_dir()
+_init_data_dirs(BASE_DIR)
+
+# Re-evaluate LOG_DIR / CONFIG_DIR for clean reference
+LOG_DIR     = BASE_DIR / "logs"
+CONFIG_DIR  = BASE_DIR / "config"
 
 # ─── OS / MODE ────────────────────────────────────────────────────────────────
 CURRENT_OS = platform.system()

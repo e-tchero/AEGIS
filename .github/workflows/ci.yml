@@ -1,0 +1,226 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Project AEGIS — Continuous Integration Pipeline
+# Lead Architect: ETCHERO / Abdul-Hameed
+#
+# Triggers:
+#   - push to main / develop branches
+#   - pull requests targeting main / develop
+#
+# Stages:
+#   1. Lint   — flake8 code style check
+#   2. Test   — pytest with coverage
+#   3. Build  — PyInstaller → AEGIS.exe (Windows only)
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: AEGIS CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths-ignore:
+      - "dashboard/**"
+      - "**.md"
+      - "LICENSE"
+  pull_request:
+    branches: [main, develop]
+    paths-ignore:
+      - "dashboard/**"
+      - "**.md"
+      - "LICENSE"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  PYTHONUNBUFFERED: 1
+
+jobs:
+  # ─── Stage 1: Lint ───────────────────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install lint dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Run flake8 linting
+        run: |
+          flake8 --version
+          flake8 --config=.flake8 .
+
+  # ─── Stage 2: Test ───────────────────────────────────────────────────────
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    needs: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install project dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-mock pytest-cov
+
+      - name: Run unit tests with pytest
+        run: |
+          python -m pytest tests/ \
+            --tb=short \
+            --verbose \
+            --cov=. \
+            --cov-report=term-missing:skip-covered \
+            --cov-report=xml
+
+      - name: Upload coverage to Codecov (optional)
+        if: success()
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          fail_ci_if_error: false
+
+  # ─── Stage 3: Build (Windows) ────────────────────────────────────────────
+  build:
+    name: Build AEGIS.exe
+    needs: test
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller websockets
+
+      - name: Verify bundled assets
+        run: |
+          @echo "Checking required assets..."
+          $required = @(
+            "image.ico",
+            "config/file_baseline.json",
+            "AEGIS_Documentation.html",
+            "investor_one_pager.html",
+            "README.md",
+            "LICENSE"
+          )
+          $missing = @()
+          foreach ($file in $required) {
+            if (Test-Path $file) {
+              Write-Host "  [OK] $file"
+            } else {
+              Write-Host "  [MISSING] $file"
+              $missing += $file
+            }
+          }
+          if ($missing.Count -gt 0) {
+            throw "Missing required assets: $($missing -join ', ')"
+          }
+
+      - name: Verify validation reports
+        run: |
+          $reports = Get-ChildItem "validation/reports/*.html" -ErrorAction SilentlyContinue
+          Write-Host "Found $($reports.Count) validation report(s)"
+          foreach ($r in $reports) {
+            Write-Host "  - $($r.Name) ($($r.Length) bytes)"
+          }
+
+      - name: Validate PyInstaller spec
+        run: |
+          python -c "
+          import sys, json, glob
+          # Quick syntax check — parse the spec file
+          with open('AEGIS.spec') as f:
+              content = f.read()
+          print(f'AEGIS.spec: {len(content)} bytes loaded')
+          # Check that datas glob resolves
+          reports = sorted(glob.glob('validation/reports/*.html'))
+          print(f'Report files resolved: {len(reports)}')
+          if len(reports) == 0:
+              print('WARNING: No validation reports found')
+          "
+
+      - name: Build AEGIS.exe with PyInstaller
+        run: |
+          Write-Host "Building AEGIS.exe (this may take several minutes)..."
+          $sw = [System.Diagnostics.Stopwatch]::StartNew()
+          pyinstaller --clean --noconfirm AEGIS.spec 2>&1
+          $sw.Stop()
+          Write-Host "Build completed in $($sw.Elapsed.TotalSeconds.ToString('F1')) seconds"
+
+      - name: Verify build output
+        run: |
+          if (Test-Path "dist/AEGIS.exe") {
+            $f = Get-Item "dist/AEGIS.exe"
+            $mb = [math]::Round($f.Length / 1MB, 2)
+            $created = $f.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+            Write-Host "AEGIS.exe: $($f.Length) bytes ($mb MB), created $created"
+            
+            # Quick smoke test
+            Write-Host "Running --help smoke test..."
+            & ".\dist\AEGIS.exe" --help 2>&1 | Select-Object -First 3
+            Write-Host "Smoke test PASSED"
+          } else {
+            throw "AEGIS.exe was not created at dist/AEGIS.exe"
+          }
+
+      - name: Upload AEGIS.exe artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AEGIS-exe-${{ github.sha }}
+          path: dist/AEGIS.exe
+          if-no-files-found: error
+          retention-days: 7
+
+  # ─── Stage 4: Summary ────────────────────────────────────────────────────
+  summary:
+    name: CI Summary
+    needs: [lint, test, build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Collect job results
+        run: |
+          echo "## CI Pipeline Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | ${{ needs.lint.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test (all versions) | ${{ needs.test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build (Windows) | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY

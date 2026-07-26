@@ -271,18 +271,19 @@ class AegisCore:
 
     def _print_banner(self) -> None:
         os_line = f"OS: {CURRENT_OS} | MODE: {MODE_LABEL}"
+        # Use ASCII box-drawing for Windows console compatibility
         print(
             "\n"
-            "╔══════════════════════════════════════════════════════╗\n"
-            "║            PROJECT AEGIS — MASTER v1.2              ║\n"
-            "║      Autonomous Security Operations Agent            ║\n"
-            f"║  {os_line:<52}║\n"
-            "║      ETCHERO | Lead Architect                        ║\n"
-            "╚══════════════════════════════════════════════════════╝\n"
+            "+======================================================+\n"
+            "|            PROJECT AEGIS - MASTER v1.2              |\n"
+            "|      Autonomous Security Operations Agent            |\n"
+            f"|  {os_line:<52}|\n"
+            "|      ETCHERO | Lead Architect                        |\n"
+            "+======================================================+\n"
         )
         if SIMULATION:
             print(
-                "  ⚠  SIMULATION MODE ACTIVE\n"
+                "  !  SIMULATION MODE ACTIVE\n"
                 "  All firewall actions will be LOGGED but NOT executed.\n"
                 "  Deploy on Linux / Parrot OS for live threat response.\n"
             )
