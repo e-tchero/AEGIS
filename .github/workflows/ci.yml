@@ -131,7 +131,7 @@ jobs:
 
       - name: Verify bundled assets
         run: |
-          @echo "Checking required assets..."
+          Write-Host "Checking required assets..."
           $required = @(
             "image.ico",
             "config/file_baseline.json",
