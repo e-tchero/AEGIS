@@ -7,7 +7,7 @@ All tunable parameters live here — no more hardcoded values in modules.
 
 Data Persistence Strategy (Windows):
   Development mode:   Project root directory
-  PyInstaller bundle: %%PROGRAMDATA%%\AEGIS (or %%LOCALAPPDATA%%\AEGIS fallback)
+  PyInstaller bundle: %%PROGRAMDATA%%\\AEGIS (or %%LOCALAPPDATA%%\\AEGIS fallback)
 
   This ensures logs, blocked IPs, evidence, and baselines survive
   across application restarts and are NOT stored inside the PyInstaller
@@ -29,9 +29,9 @@ def _get_data_dir() -> Path:
     """Return the persistent AEGIS data directory.
 
     Strategy (PyInstaller bundle only):
-      1. Try %%PROGRAMDATA%%\AEGIS (all-users) — may fail if non-admin
-      2. Fall back to %%LOCALAPPDATA%%\AEGIS (per-user, always writable)
-      3. Final fallback to ~\.aegis
+      1. Try %%PROGRAMDATA%%\\AEGIS (all-users) — may fail if non-admin
+      2. Fall back to %%LOCALAPPDATA%%\\AEGIS (per-user, always writable)
+      3. Final fallback to ~\\.aegis
 
     Each candidate is probe-written immediately (mkdir) so that
     PermissionError is caught and the next candidate is tried.
@@ -447,6 +447,8 @@ DASHBOARD_LOG_MAX_BYTES = 5 * 1024 * 1024
 DASHBOARD_LOG_BACKUP_COUNT = 3
 
 # ─── SAFE ROTATING FILE HANDLER ─────────────────────────────────────────────
+
+
 class SafeRotatingFileHandler(RotatingFileHandler):
     """RotatingFileHandler that gracefully handles Windows PermissionError
     during log rotation by retrying with backoff and falling back to
@@ -496,6 +498,8 @@ class SafeRotatingFileHandler(RotatingFileHandler):
             self.stream = open(self.baseFilename, "a", encoding=self.encoding)
 
 # ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
+
+
 NOTIFY_ON_LEVELS = {"CRITICAL", "HIGH"}  # which threat levels trigger notifications
 DISCORD_WEBHOOK_URL = ""   # set via env or config override
 SLACK_WEBHOOK_URL = ""     # set via env or config override
