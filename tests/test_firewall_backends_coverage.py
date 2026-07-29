@@ -14,6 +14,7 @@ import shutil
 from unittest.mock import patch, MagicMock
 
 import pytest
+import sys
 
 
 # ─── Fixtures ─────────────────────────────────────────────────────────────────
@@ -363,6 +364,7 @@ class TestNftablesBackend:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Netsh is Windows-only")
 class TestNetshBackend:
     """Tests for the NetshBackend class (Windows)."""
 

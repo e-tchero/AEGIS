@@ -129,6 +129,7 @@ class TestBlockUnblock:
         assert cleared == 2
         assert block_count() == 0
 
+    @pytest.mark.skipif(sys.platform != "win32", reason="IPv6 blocking requires Windows")
     def test_block_ipv6(self):
         assert block_ip("2001:db8::1") is True
         assert is_blocked("2001:db8::1") is True
