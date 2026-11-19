@@ -1,6 +1,14 @@
 # Project AEGIS - Security Operations Platform
 
-AEGIS is a real-time Windows security monitoring platform that defends your system against cyber threats. It runs silently in the background, providing continuous threat detection and response.
+AEGIS is an endpoint security platform focused on continuous monitoring, threat detection, evidence collection, incident analysis, and defensive response. Its direction is to help turn individual security signals into understandable, evidence-backed incidents that administrators and security analysts can investigate and act on.
+
+## Why the Name AEGIS?
+
+**Aegis** comes from Greek mythology, where the Aegis is a protective shield associated with Zeus and Athena. The word has come to represent protection, defence, and safeguarding.
+
+That meaning reflects AEGIS's purpose as an endpoint defence platform: maintain visibility across a system, identify suspicious activity, preserve the evidence needed to understand it, connect related events into incidents, and support an appropriate response. Detection is only the beginning; the goal is to make security events explainable and actionable.
+
+AEGIS is a name with a meaning, not an acronym. Its guiding idea is simple: **protection through visibility, evidence, and informed response.**
 
 ---
 
