@@ -21,7 +21,7 @@ import time
 from collections import defaultdict
 from dataclasses import dataclass, asdict
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from threading import Lock
 from typing import Callable, Dict, List, Optional, Set, Tuple
@@ -32,6 +32,7 @@ from scapy.all import AsyncSniffer, IP, TCP, UDP  # type: ignore[import-untyped,
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     SCAN_WINDOW_SECONDS,
     PORT_HIT_THRESHOLD,
     ALERT_COOLDOWN_SECONDS,
@@ -44,7 +45,7 @@ from config import (  # noqa: E402
 # ─── LOGGER SETUP ─────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.sentinel")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(SENTINEL_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,

@@ -1,0 +1,262 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Project AEGIS — Release Pipeline
+# Lead Architect: ETCHERO / Abdul-Hameed
+#
+# Triggers:
+#   - git tag v*.*.*   (e.g., v1.0.0, v1.1.0)
+#
+# Produces:
+#   - AEGIS.exe         (standalone executable)
+#   - AEGIS_Setup_v*.exe (Inno Setup installer, if available)
+#   - GitHub Release with both artifacts
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: AEGIS Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: "3.11"
+  PYTHONUNBUFFERED: 1
+
+jobs:
+  # ─── Stage 1: Build Executable ───────────────────────────────────────────
+  build:
+    name: Build AEGIS.exe
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller websockets
+
+      - name: Verify all bundled assets
+        run: |
+          $errors = @()
+          @(
+            "image.ico",
+            "config/file_baseline.json",
+            "AEGIS_Documentation.html",
+            "investor_one_pager.html",
+            "README.md",
+            "LICENSE",
+            "installer.iss",
+            "runtime_hooks/runtime_path.py"
+          ) | ForEach-Object {
+            if (Test-Path $_) {
+              Write-Host "  [OK] $_"
+            } else {
+              Write-Host "  [MISSING] $_"
+              $errors += $_
+            }
+          }
+          $reports = @(Get-ChildItem "validation/reports/*.html" -ErrorAction SilentlyContinue)
+          Write-Host "  [OK] validation/reports/ ($($reports.Count) file(s))"
+          
+          if ($errors.Count -gt 0) {
+            throw "Missing files: $($errors -join ', ')"
+          }
+
+      - name: Build AEGIS.exe with PyInstaller
+        run: |
+          Write-Host "Building release AEGIS.exe..."
+          $sw = [System.Diagnostics.Stopwatch]::StartNew()
+          pyinstaller --clean --noconfirm AEGIS.spec 2>&1
+          $sw.Stop()
+          Write-Host "Build finished in $($sw.Elapsed.TotalSeconds.ToString('F1')) seconds"
+
+      - name: Verify and smoke-test executable
+        run: |
+          if (-not (Test-Path "dist/AEGIS.exe")) {
+            throw "AEGIS.exe not found after build"
+          }
+          $f = Get-Item "dist/AEGIS.exe"
+          $mb = [math]::Round($f.Length / 1MB, 2)
+          Write-Host "AEGIS.exe: $($f.Length) bytes ($mb MB)"
+
+          $output = & ".\dist\AEGIS.exe" --help 2>&1 | Out-String
+          if ($output -match "usage: aegis") {
+            Write-Host "Smoke test PASSED"
+          } else {
+            throw "Smoke test FAILED: --help did not show usage"
+          }
+
+      - name: Upload AEGIS.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: AEGIS-exe-release
+          path: dist/AEGIS.exe
+          if-no-files-found: error
+
+  # ─── Stage 2: Build Installer ────────────────────────────────────────────
+  installer:
+    name: Build AEGIS Setup
+    needs: build
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download AEGIS.exe artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: AEGIS-exe-release
+          path: dist/
+
+      - name: Install Inno Setup
+        run: |
+          choco install innosetup -y --no-progress
+          # Verify installation
+          $iscc = Get-ChildItem -Path "$env:PROGRAMFILES (x86)\Inno Setup *" -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue
+          if (-not $iscc) {
+            $iscc = Get-ChildItem -Path "$env:LOCALAPPDATA\Programs\Inno Setup *" -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue
+          }
+          if ($iscc) {
+            Write-Host "Inno Setup found: $($iscc.FullName)"
+          } else {
+            throw "ISCC.exe not found after Chocolatey install"
+          }
+
+      - name: Build installer with ISCC
+        run: |
+          Write-Host "Compiling installer.iss..."
+          $iscc = Get-ChildItem -Path "$env:PROGRAMFILES (x86)" -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue
+          if (-not $iscc) {
+            $iscc = Get-ChildItem -Path "$env:LOCALAPPDATA\Programs" -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue
+          }
+          if (-not $iscc) {
+            throw "Could not locate ISCC.exe"
+          }
+          & $iscc[0].FullName "installer.iss" 2>&1
+          if ($LASTEXITCODE -ne 0) {
+            throw "ISCC compilation failed (exit code: $LASTEXITCODE)"
+          }
+
+      - name: Verify installer
+        run: |
+          $installer = Get-ChildItem "release/AEGIS_Setup_v*.exe" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if ($installer) {
+            $mb = [math]::Round($installer.Length / 1MB, 2)
+            Write-Host "Installer: $($installer.Name) ($($installer.Length) bytes / $mb MB)"
+          } else {
+            Write-Host "WARNING: Installer not found — check ISCC output above"
+          }
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AEGIS-Setup-release
+          path: release/AEGIS_Setup_v*.exe
+          if-no-files-found: warn
+
+  # ─── Stage 3: Publish Release ────────────────────────────────────────────
+  publish:
+    name: Publish GitHub Release
+    needs: [build, installer]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-assets
+          
+          # Copy exe
+          if [ -f artifacts/AEGIS-exe-release/AEGIS.exe ]; then
+            cp artifacts/AEGIS-exe-release/AEGIS.exe release-assets/
+            echo "Added AEGIS.exe"
+          fi
+          
+          # Copy installer
+          for f in artifacts/AEGIS-Setup-release/AEGIS_Setup_v*.exe; do
+            if [ -f "$f" ]; then
+              cp "$f" release-assets/
+              echo "Added $(basename $f)"
+            fi
+          done
+          
+          # Copy docs and license
+          cp AEGIS_Documentation.html release-assets/ 2>/dev/null || true
+          cp LICENSE release-assets/ 2>/dev/null || true
+          
+          echo ""
+          echo "Release assets:"
+          ls -lh release-assets/
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          # Strip 'v' prefix from tag
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Release version: $VERSION"
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          cat > release-notes.md << 'EOF'
+          ## Project AEGIS v${{ steps.version.outputs.version }}
+
+          ### What's Included
+          - **AEGIS.exe** — Standalone security agent (no Python required)
+          - **AEGIS_Setup_v${{ steps.version.outputs.version }}.exe** — Windows installer
+          - **AEGIS_Documentation.html** — Full system documentation
+          - **LICENSE** — MIT License
+
+          ### Installation
+          1. Download `AEGIS_Setup_v${{ steps.version.outputs.version }}.exe`
+          2. Run the installer (admin privileges recommended)
+          3. Launch AEGIS from Start Menu or command line
+
+          ### Data Storage
+          - Logs: `%PROGRAMDATA%\AEGIS\logs\`
+          - Config: `%PROGRAMDATA%\AEGIS\config\`
+          - Evidence: `%PROGRAMDATA%\AEGIS\evidence\`
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: AEGIS v${{ steps.version.outputs.version }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          files: |
+            release-assets/AEGIS.exe
+            release-assets/AEGIS_Setup_v*.exe
+            release-assets/AEGIS_Documentation.html
+            release-assets/LICENSE
+          fail_on_unmatched_files: false

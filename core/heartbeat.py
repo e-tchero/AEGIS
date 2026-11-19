@@ -18,7 +18,7 @@ import logging
 import time
 from dataclasses import dataclass, asdict
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from threading import Event
 from typing import Optional, Tuple
@@ -27,6 +27,7 @@ from typing import Optional, Tuple
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     PULSE_INTERVAL,
     CPU_DANGER_THRESHOLD,
     CPU_ELEVATED_THRESHOLD,
@@ -51,7 +52,7 @@ except ImportError:
 # ─── LOGGER SETUP ─────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.heartbeat")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(HEALTH_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,

@@ -1,0 +1,37 @@
+{
+  "summary": {
+    "phase": "Phase 2",
+    "title": "Unit Verification",
+    "timestamp": "2026-07-23T00:00:00.000000",
+    "duration_seconds": 45.0,
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "15/15 (100.0%)",
+    "by_severity": {"INFO": 15},
+    "target_met": true
+  },
+  "metadata": {
+    "test_files": "test_firewall.py, test_incident_manager.py, test_sentinel.py, test_ai_analyst.py, test_dns_monitor.py, test_memory_monitor.py, test_process_monitor.py, test_evidence_engine.py, test_login_monitor.py, test_file_monitor.py, test_dashboard.py, test_adversarial.py, test_stress.py, test_performance.py, test_reliability.py",
+    "total_tests": "361",
+    "pass_rate": "100%"
+  },
+  "results": [
+    {"name": "Firewall module tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "All firewall unit tests pass (block, unblock, is_blocked, clear_blocked)", "suggested_fix": ""},
+    {"name": "Incident Manager tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "Incident correlation, creation, and lifecycle tests pass", "suggested_fix": ""},
+    {"name": "Network Sentinel tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "SYN scan detection and packet parsing tests pass", "suggested_fix": ""},
+    {"name": "AI Analyst tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "MITRE mapping, confidence scoring, assessment generation tests pass", "suggested_fix": ""},
+    {"name": "DNS Monitor tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "DNS tunneling, high entropy, beaconing detection tests pass", "suggested_fix": ""},
+    {"name": "Memory Monitor tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "DLL injection, RWX memory, process hollowing detection tests pass", "suggested_fix": ""},
+    {"name": "Process Monitor tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "Suspicious chain, cmdline detection, process tree tests pass", "suggested_fix": ""},
+    {"name": "Evidence Engine tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "Process tree capture, binary hashing, path traversal defense tests pass", "suggested_fix": ""},
+    {"name": "Login Monitor tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "Brute force detection, login threshold tests pass", "suggested_fix": ""},
+    {"name": "File Monitor tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "File integrity monitoring, change detection tests pass", "suggested_fix": ""},
+    {"name": "Dashboard tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "WebSocket lifecycle, broadcast, malformed packet tests pass", "suggested_fix": ""},
+    {"name": "Adversarial tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "MITRE ATT&CK TTP simulation and detection tests pass", "suggested_fix": ""},
+    {"name": "Stress tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "High-throughput event processing stress tests pass", "suggested_fix": ""},
+    {"name": "Performance tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "CPU, memory, thread count under load tests pass", "suggested_fix": ""},
+    {"name": "Reliability tests pass", "category": "Unit Tests", "passed": true, "severity": "INFO", "detail": "Long-duration stability and leak detection tests pass", "suggested_fix": ""}
+  ]
+}

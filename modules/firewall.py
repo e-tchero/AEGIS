@@ -21,7 +21,7 @@ import json
 import logging
 import platform
 import threading
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from typing import List, Set
 
@@ -29,6 +29,7 @@ from typing import List, Set
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config import (  # noqa: E402
+    SafeRotatingFileHandler,
     SIMULATION,
     ALLOWLIST_IPS,
     BLOCKED_IPS_FILE,
@@ -45,7 +46,7 @@ from modules.firewall_backends import BACKEND, FirewallBackend  # noqa: E402
 # ─── LOGGER SETUP ─────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.firewall")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(FIREWALL_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,
@@ -96,6 +97,9 @@ def is_valid_ip(ip: str) -> bool:
         return False
     if addr.is_unspecified:
         _logger.warning(f"Refusing to block unspecified address: {ip}")
+        return False
+    if addr.is_reserved:
+        _logger.warning(f"Refusing to block reserved address: {ip}")
         return False
 
     return True

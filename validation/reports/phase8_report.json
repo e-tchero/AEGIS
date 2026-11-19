@@ -1,0 +1,166 @@
+{
+  "summary": {
+    "phase": "Phase 8",
+    "title": "Reliability Testing",
+    "timestamp": "2026-07-23T22:14:45.216291",
+    "duration_seconds": 1209.11,
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "15/15 (100.0%)",
+    "by_severity": {
+      "INFO": 15
+    },
+    "target_met": true
+  },
+  "metadata": {
+    "target_duration_minutes": "20.0",
+    "sample_interval": "5",
+    "event_injection_rate": "20",
+    "actual_duration_seconds": "1200.1",
+    "samples_collected": "238",
+    "events_injected": "23440",
+    "injection_crashes": "0",
+    "initial_rss_mb": "95.0",
+    "final_rss_mb": "93.1",
+    "rss_delta_mb": "-1.8",
+    "rss_min_mb": "91.9",
+    "rss_max_mb": "96.9",
+    "initial_threads": "11",
+    "final_threads": "4",
+    "thread_delta": "-7",
+    "thread_min": "4",
+    "thread_max": "11",
+    "avg_cpu_percent": "0.0",
+    "max_cpu_percent": "5.3",
+    "initial_gc_objects": "111404",
+    "final_gc_objects": "112817",
+    "initial_log_mb": "28.5",
+    "final_log_mb": "30.7",
+    "log_growth_mb": "2.2",
+    "post_stop_rss_mb": "93.1"
+  },
+  "results": [
+    {
+      "name": "All components boot successfully",
+      "category": "Boot",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All 5 components booted successfully",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No memory leak (RSS growth < 15 MB/hour)",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "RSS memory slope: +1.28 MB/hour (r=0.20) \u2014 stable",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Peak memory stays within expected range",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Peak RSS: 96.9 MB (threshold: 155 MB) \u2014 +2.0 MB from start",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No thread leak (thread growth < 5/hour)",
+      "category": "Threads",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Thread count slope: -9.56 threads/hour (r=-0.57) \u2014 shrinking",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Thread count stays below 100",
+      "category": "Threads",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Max threads: 11 (limit: < 100)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No CPU drift (trend < 10%/hour)",
+      "category": "CPU",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "CPU slope: +0.35%/hour (r=0.10) \u2014 stable",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Average CPU usage < 15%",
+      "category": "CPU",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Average CPU: 0.0% (target: < 15%)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No GC object leak (stable object count)",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "GC objects slope: +2870 objects/hour (r=0.65) \u2014 initial=111404, final=112817",
+      "suggested_fix": ""
+    },
+    {
+      "name": "No handle leak (handle growth < 10/hour)",
+      "category": "File System",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Open file handles slope: +0.00 handles/hour (r=0.00) \u2014 stable",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Log file growth < 100 MB/hour",
+      "category": "Disk",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Log growth: +6.74 MB/hour (initial=28.5MB, final=30.7MB)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Zero crashes during continuous operation",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Zero crashes during 23440 event injections over 1200s",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Continuous operation maintained for target duration",
+      "category": "Stability",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Ran for 1200s of 1200s target (100%)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Components stop cleanly (no errors)",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "All components stopped without errors",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Memory released after component stop",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Post-stop RSS: 93.1 MB (not significantly above peak)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "GC objects return to baseline after stop",
+      "category": "Memory",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "GC objects after stop: 111677 (within 20% of initial: 111404)",
+      "suggested_fix": ""
+    }
+  ]
+}

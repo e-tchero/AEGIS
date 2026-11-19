@@ -28,3 +28,26 @@ htmlcov/
 
 # Config persistence (auto-generated)
 config/blocked_ips.json
+
+# Build artifacts
+dist/
+build/
+release/
+*.exe
+innosetup_installer.exe
+
+# Runtime logs
+output_log.txt
+*_output.txt
+nul
+
+# Test scripts
+test_win.ps1
+test_windows.ps1
+verify_installer.bat
+run_installer_test.bat
+find_iscc.bat
+build_installer.bat
+
+# Allow the built binary for distribution
+!dist/AEGIS.exe

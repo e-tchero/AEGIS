@@ -28,7 +28,7 @@ import time
 import traceback
 import urllib.request
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+
 from pathlib import Path
 from typing import Any, Optional
 
@@ -36,6 +36,7 @@ from typing import Any, Optional
 BASE_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(BASE_DIR))
 from config import (  # noqa: E402,E501
+    SafeRotatingFileHandler,
     SIMULATION,
     CURRENT_OS,
     MODE_LABEL,
@@ -53,7 +54,7 @@ from config import (  # noqa: E402,E501
 # ─── LOGGER SETUP ─────────────────────────────────────────────────────────────
 _logger = logging.getLogger("aegis.master")
 if not _logger.handlers:
-    _handler = RotatingFileHandler(
+    _handler = SafeRotatingFileHandler(
         str(AEGIS_LOG_FILE),
         maxBytes=LOG_MAX_BYTES,
         backupCount=LOG_BACKUP_COUNT,
@@ -270,18 +271,19 @@ class AegisCore:
 
     def _print_banner(self) -> None:
         os_line = f"OS: {CURRENT_OS} | MODE: {MODE_LABEL}"
+        # Use ASCII box-drawing for Windows console compatibility
         print(
             "\n"
-            "╔══════════════════════════════════════════════════════╗\n"
-            "║            PROJECT AEGIS — MASTER v1.2              ║\n"
-            "║      Autonomous Security Operations Agent            ║\n"
-            f"║  {os_line:<52}║\n"
-            "║      ETCHERO | Lead Architect                        ║\n"
-            "╚══════════════════════════════════════════════════════╝\n"
+            "+======================================================+\n"
+            "|            PROJECT AEGIS - MASTER v1.2              |\n"
+            "|      Autonomous Security Operations Agent            |\n"
+            f"|  {os_line:<52}|\n"
+            "|      ETCHERO | Lead Architect                        |\n"
+            "+======================================================+\n"
         )
         if SIMULATION:
             print(
-                "  ⚠  SIMULATION MODE ACTIVE\n"
+                "  !  SIMULATION MODE ACTIVE\n"
                 "  All firewall actions will be LOGGED but NOT executed.\n"
                 "  Deploy on Linux / Parrot OS for live threat response.\n"
             )

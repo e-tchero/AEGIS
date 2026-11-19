@@ -4,17 +4,100 @@ Lead Architect: ETCHERO / Abdul-Hameed
 Version: 1.1.0 | Classification: AEGIS-CONFIG
 
 All tunable parameters live here — no more hardcoded values in modules.
+
+Data Persistence Strategy (Windows):
+  Development mode:   Project root directory
+  PyInstaller bundle: %%PROGRAMDATA%%\\AEGIS (or %%LOCALAPPDATA%%\\AEGIS fallback)
+
+  This ensures logs, blocked IPs, evidence, and baselines survive
+  across application restarts and are NOT stored inside the PyInstaller
+  temporary extraction directory (_MEIPASS) which is cleaned by the OS.
 """
 
+import os
 import platform
+import shutil
+import sys
+import time
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-# ─── PATHS ───────────────────────────────────────────────────────────────────
-BASE_DIR = Path(__file__).resolve().parent
-LOG_DIR  = BASE_DIR / "logs"
-CONFIG_DIR = BASE_DIR / "config"
-CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+# ─── PERSISTENT DATA DIRECTORY ────────────────────────────────────────────────
+
+def _get_data_dir() -> Path:
+    """Return the persistent AEGIS data directory.
+
+    Strategy (PyInstaller bundle only):
+      1. Try %%PROGRAMDATA%%\\AEGIS (all-users) — may fail if non-admin
+      2. Fall back to %%LOCALAPPDATA%%\\AEGIS (per-user, always writable)
+      3. Final fallback to ~\\.aegis
+
+    Each candidate is probe-written immediately (mkdir) so that
+    PermissionError is caught and the next candidate is tried.
+
+    In development mode (unfrozen), uses the project root so existing
+    behaviour is unchanged. No probe-write is needed since the project
+    root already exists.
+    """
+    if not getattr(sys, "frozen", False):
+        return Path(__file__).resolve().parent
+
+    # --- Candidates in priority order ---
+    candidates: list[Path] = []
+
+    pd = os.environ.get("PROGRAMDATA")
+    if pd and os.path.isabs(pd):
+        candidates.append(Path(pd) / "AEGIS")
+
+    lad = os.environ.get("LOCALAPPDATA")
+    if lad and os.path.isabs(lad):
+        candidates.append(Path(lad) / "AEGIS")
+
+    # Final safety net
+    candidates.append(Path.home() / ".aegis")
+
+    for candidate in candidates:
+        try:
+            candidate.mkdir(parents=True, exist_ok=True)
+            return candidate
+        except (PermissionError, OSError):
+            continue
+
+    # Should never reach here
+    return candidates[-1]
+
+
+def _init_data_dirs(data_dir: Path) -> None:
+    """Create the persistent data directory tree and seed bundled assets.
+
+    data_dir itself was already created by _get_data_dir() above, so
+    creating sub-directories should not fail (they inherit the parent's
+    ACL on Windows).
+    """
+    subdirs = ["logs", "config", "evidence"]
+    for name in subdirs:
+        (data_dir / name).mkdir(parents=True, exist_ok=True)
+
+    # On first run from a PyInstaller bundle, seed file_baseline.json
+    # from the bundled assets inside _MEIPASS into the persistent location.
+    if getattr(sys, "frozen", False):
+        meipass = getattr(sys, "_MEIPASS", None)
+        if meipass:
+            bundled = Path(meipass) / "config" / "file_baseline.json"
+            if bundled.exists():
+                target = data_dir / "config" / "file_baseline.json"
+                if not target.exists():
+                    shutil.copy2(str(bundled), str(target))
+
+
+# ─── EVALUATE PERSISTENT PATHS ────────────────────────────────────────────────
+BASE_DIR = _get_data_dir()
+_init_data_dirs(BASE_DIR)
+
+# Re-evaluate LOG_DIR / CONFIG_DIR for clean reference
+LOG_DIR     = BASE_DIR / "logs"
+CONFIG_DIR  = BASE_DIR / "config"
 
 # ─── OS / MODE ────────────────────────────────────────────────────────────────
 CURRENT_OS = platform.system()
@@ -51,6 +134,8 @@ BLOCKED_IPS_FILE = CONFIG_DIR / "blocked_ips.json"
 MAX_BLOCKED_IPS = 5000        # safety cap
 
 FIREWALL_LOG_FILE = LOG_DIR / "firewall.log"
+FIREWALL_BACKEND_LOG_FILE = LOG_DIR / "firewall_backend.log"
+
 FIREWALL_TIMEOUT = 8          # seconds for firewall commands
 FIREWALL_BACKEND = None       # Set to "iptables", "nftables", "netsh", "pf", or "simulation" to override auto-detect
 
@@ -361,7 +446,60 @@ DASHBOARD_POLL_INTERVAL = 3           # seconds between state broadcasts
 DASHBOARD_LOG_MAX_BYTES = 5 * 1024 * 1024
 DASHBOARD_LOG_BACKUP_COUNT = 3
 
+# ─── SAFE ROTATING FILE HANDLER ─────────────────────────────────────────────
+
+
+class SafeRotatingFileHandler(RotatingFileHandler):
+    """RotatingFileHandler that gracefully handles Windows PermissionError
+    during log rotation by retrying with backoff and falling back to
+    copytruncate-style rotation on Windows.
+    """
+
+    MAX_RETRIES = 3
+    RETRY_DELAY = 0.2  # seconds
+
+    def doRollover(self):
+        """Override doRollover with retry logic for Windows file locks."""
+        for attempt in range(self.MAX_RETRIES):
+            try:
+                super().doRollover()
+                return
+            except PermissionError:
+                if attempt < self.MAX_RETRIES - 1:
+                    time.sleep(self.RETRY_DELAY * (attempt + 1))
+                else:
+                    self._copytruncate_rollover()
+
+    def _copytruncate_rollover(self):
+        """Fallback rotation strategy: copy file and truncate original.
+        Works on Windows because it does not require renaming an open file.
+        """
+        try:
+            self.close()
+            base_filename = self.baseFilename
+            for i in range(self.backupCount - 1, 0, -1):
+                src = f"{base_filename}.{i}"
+                dst = f"{base_filename}.{i + 1}"
+                if os.path.exists(src):
+                    if os.path.exists(dst):
+                        os.remove(dst)
+                    shutil.copy2(src, dst)
+            if os.path.exists(base_filename):
+                dst = f"{base_filename}.1"
+                if os.path.exists(dst):
+                    os.remove(dst)
+                shutil.copy2(base_filename, dst)
+            with open(base_filename, "w"):
+                pass
+            self.stream = open(base_filename, "a", encoding=self.encoding)
+        except Exception:
+            if self.stream:
+                self.stream.close()
+            self.stream = open(self.baseFilename, "a", encoding=self.encoding)
+
 # ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
+
+
 NOTIFY_ON_LEVELS = {"CRITICAL", "HIGH"}  # which threat levels trigger notifications
 DISCORD_WEBHOOK_URL = ""   # set via env or config override
 SLACK_WEBHOOK_URL = ""     # set via env or config override

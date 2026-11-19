@@ -1,0 +1,87 @@
+{
+  "summary": {
+    "phase": "Phase 10",
+    "title": "Dashboard Testing",
+    "timestamp": "2026-07-23T23:11:32.140255",
+    "duration_seconds": 45.68,
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "8/8 (100.0%)",
+    "by_severity": {
+      "INFO": 8
+    },
+    "target_met": true
+  },
+  "metadata": {
+    "tests_run": "8",
+    "total_errors": "0"
+  },
+  "results": [
+    {
+      "name": "Dashboard server survives start/stop/restart cycles",
+      "category": "Lifecycle",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "2 start / 2 stop cycles without errors",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Client connects and receives state immediately",
+      "category": "Connectivity",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "Client connected and received state immediately",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Multiple clients connect and receive broadcasts simultaneously",
+      "category": "Concurrency",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "10/10 connected, 10 received state",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Server handles malformed WebSocket packets without crash",
+      "category": "Resilience",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "7 malformed packets sent, server survived, client reconnected",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Dashboard command channel works (block/unblock IP)",
+      "category": "Command Channel",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "3 commands, 3 responses, 2 executed",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Server handles 100 rapid incident updates without error",
+      "category": "Performance",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "100 updates pushed, 101 received, 0 errors",
+      "suggested_fix": ""
+    },
+    {
+      "name": "All connected clients receive identical broadcast state",
+      "category": "Integrity",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "3 clients received structurally identical state (health, blocked_ips, incidents keys present)",
+      "suggested_fix": ""
+    },
+    {
+      "name": "Server handles client disconnects and reconnects gracefully",
+      "category": "Resilience",
+      "passed": true,
+      "severity": "INFO",
+      "detail": "5 connect/disconnect cycles, 5 successful reconnects",
+      "suggested_fix": ""
+    }
+  ]
+}

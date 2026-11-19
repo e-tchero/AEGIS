@@ -2,8 +2,8 @@
   "summary": {
     "phase": "Phase 7",
     "title": "Stress Testing",
-    "timestamp": "2026-07-23T06:44:05.854570",
-    "duration_seconds": 183.8,
+    "timestamp": "2026-07-23T20:00:55.666873",
+    "duration_seconds": 65.65,
     "total": 22,
     "passed": 22,
     "failed": 0,
@@ -16,11 +16,11 @@
   },
   "metadata": {
     "total_events_generated": "40000",
-    "incident_throughput": "432 ev/s",
-    "firewall_throughput": "104 blk/s",
-    "dns_throughput": "86957 q/s",
-    "login_throughput": "255383 ev/s",
-    "memory_after_mb": "25.1"
+    "incident_throughput": "2379 ev/s",
+    "firewall_throughput": "219 blk/s",
+    "dns_throughput": "82507 q/s",
+    "login_throughput": "294527 ev/s",
+    "memory_after_mb": "25.0"
   },
   "results": [
     {
@@ -28,7 +28,7 @@
       "category": "Throughput",
       "passed": true,
       "severity": "INFO",
-      "detail": "432 events/sec (target: >= 400)",
+      "detail": "2379 events/sec (target: >= 400)",
       "suggested_fix": ""
     },
     {
@@ -68,7 +68,7 @@
       "category": "Throughput",
       "passed": true,
       "severity": "INFO",
-      "detail": "104 blocks/sec (target: >= 100 for simulation backend)",
+      "detail": "219 blocks/sec (target: >= 100 for simulation backend)",
       "suggested_fix": ""
     },
     {
@@ -100,7 +100,7 @@
       "category": "Throughput",
       "passed": true,
       "severity": "INFO",
-      "detail": "86957 queries/sec (target: >= 5,000)",
+      "detail": "82507 queries/sec (target: >= 5,000)",
       "suggested_fix": ""
     },
     {
@@ -124,7 +124,7 @@
       "category": "Throughput",
       "passed": true,
       "severity": "INFO",
-      "detail": "255383 events/sec (target: >= 5,000)",
+      "detail": "294527 events/sec (target: >= 5,000)",
       "suggested_fix": ""
     },
     {
@@ -148,7 +148,7 @@
       "category": "Throughput",
       "passed": true,
       "severity": "INFO",
-      "detail": "414 events/sec across 100 attackers (target: >= 300)",
+      "detail": "2342 events/sec across 100 attackers (target: >= 300)",
       "suggested_fix": ""
     },
     {
@@ -172,7 +172,7 @@
       "category": "Memory",
       "passed": true,
       "severity": "INFO",
-      "detail": "25.1 MB RSS after stress tests (target: < 150 MB)",
+      "detail": "25.0 MB RSS after stress tests (target: < 150 MB)",
       "suggested_fix": ""
     },
     {
@@ -188,7 +188,7 @@
       "category": "Concurrency",
       "passed": true,
       "severity": "INFO",
-      "detail": "All 4 workers completed in 38.8s",
+      "detail": "All 4 workers completed in 11.8s",
       "suggested_fix": ""
     },
     {
@@ -196,7 +196,7 @@
       "category": "Concurrency",
       "passed": true,
       "severity": "INFO",
-      "detail": "Completed in 38.8s (no deadlock detected, timeout was 60s)",
+      "detail": "Completed in 11.8s (no deadlock detected, timeout was 60s)",
       "suggested_fix": ""
     }
   ]

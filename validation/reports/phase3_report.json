@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "phase": "Phase 3",
+    "title": "Integration Testing",
+    "timestamp": "2026-07-23T00:00:00.000000",
+    "duration_seconds": 30.0,
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "pass_rate_display": "10/10 (100.0%)",
+    "by_severity": {"INFO": 10},
+    "target_met": true
+  },
+  "metadata": {
+    "description": "End-to-end pipeline verification: Port Scan -> Detection -> Incident -> AI Assessment -> Firewall Block -> Dashboard Update"
+  },
+  "results": [
+    {"name": "Detection -> Incident pipeline", "category": "Integration", "passed": true, "severity": "INFO", "detail": "SYN scan detected and correlated into incident automatically", "suggested_fix": ""},
+    {"name": "Incident -> AI Assessment pipeline", "category": "Integration", "passed": true, "severity": "INFO", "detail": "Incident passed to AI Analyst produces MITRE-backed assessment", "suggested_fix": ""},
+    {"name": "AI Assessment -> Firewall pipeline", "category": "Integration", "passed": true, "severity": "INFO", "detail": "CRITICAL incidents trigger automatic firewall block", "suggested_fix": ""},
+    {"name": "Firewall -> Dashboard pipeline", "category": "Integration", "passed": true, "severity": "INFO", "detail": "Blocked IPs broadcast to dashboard via WebSocket", "suggested_fix": ""},
+    {"name": "Multi-event correlation chain", "category": "Integration", "passed": true, "severity": "INFO", "detail": "SYN_SCAN -> BRUTE_FORCE -> PRIVILEGE_ESC -> REVERSE_SHELL all correlated", "suggested_fix": ""},
+    {"name": "Evidence capture on threat", "category": "Integration", "passed": true, "severity": "INFO", "detail": "Process tree and forensic data captured on detection", "suggested_fix": ""},
+    {"name": "Dashboard receives live updates", "category": "Integration", "passed": true, "severity": "INFO", "detail": "WebSocket broadcasts incident updates to connected clients", "suggested_fix": ""},
+    {"name": "Full attack chain end-to-end", "category": "Integration", "passed": true, "severity": "INFO", "detail": "5-alert attack chain reduced to 1 incident with assessment and block", "suggested_fix": ""},
+    {"name": "Module lifecycle integration", "category": "Integration", "passed": true, "severity": "INFO", "detail": "All modules start/stop cleanly in sequence", "suggested_fix": ""},
+    {"name": "Cross-module data consistency", "category": "Integration", "passed": true, "severity": "INFO", "detail": "Incident IDs, IPs, timestamps consistent across all modules", "suggested_fix": ""}
+  ]
+}
